@@ -1,7 +1,26 @@
+using FrontWally.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+
+builder.Services.AddHttpClient<ApiService>(client =>
+{
+    //Defne la URL base que consumira la API
+    client.BaseAddress = new Uri("https://localhost:7173/api/"); // URL base de la API
+});
+
+builder.Services.AddScoped<AuthService>();
+
+// Configurar la autenticación con cookies
+builder.Services.AddAuthentication("AuthCookie")
+.AddCookie("AuthCookie", options =>
+{
+    options.LoginPath = "/Auth/Login"; // Ruta a la página de login
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+});
 
 var app = builder.Build();
 
@@ -17,6 +36,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
