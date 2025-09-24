@@ -1,0 +1,6 @@
+﻿@if (User.Identity.IsAuthenticated)
+{
+    <span class="navbar-text me-2">
+        @ViewBag.Nombre (@ViewBag.Rol)
+    </span>
+}
