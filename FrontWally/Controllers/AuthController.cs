@@ -49,7 +49,7 @@ namespace FrontWally.Controllers
             if (result == null || result.Id <= 0)
             {
                 ViewBag.Error = "Error al registrar el usuario";
-                return View("Registro");
+                return View();
 
             }
             // Crear y firmar los claims usando el helper
