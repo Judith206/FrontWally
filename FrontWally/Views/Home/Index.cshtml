@@ -1,8 +1,97 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row">
+    <div class="col">
+        <p class="text-white mt-5 mb-5">Welcome back, <b>Admin</b></p>
+    </div>
 </div>
+
+<!-- row -->
+<div class="row tm-content-row">
+    <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
+        <div class="tm-bg-primary-dark tm-block">
+            <h2 class="tm-block-title">Latest Hits</h2>
+            <canvas id="lineChart"></canvas>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
+        <div class="tm-bg-primary-dark tm-block">
+            <h2 class="tm-block-title">Performance</h2>
+            <canvas id="barChart"></canvas>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
+        <div class="tm-bg-primary-dark tm-block tm-block-taller">
+            <h2 class="tm-block-title">Storage Information</h2>
+            <div id="pieChartContainer">
+                <canvas id="pieChart" class="chartjs-render-monitor" width="200" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
+        <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-overflow">
+            <h2 class="tm-block-title">Notification List</h2>
+            <div class="tm-notification-items">
+                <!-- Aquí puedes cargar notificaciones dinámicamente -->
+                <div class="media tm-notification-item">
+                    <div class="tm-gray-circle">
+                        <i class="fas fa-bell fa-2x"></i>
+                    </div>
+                    <div class="media-body">
+                        <p class="mb-2">Bienvenido al sistema de administración</p>
+                        <span class="tm-small tm-text-color-secondary">Justo ahora</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 tm-block-col">
+        <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
+            <h2 class="tm-block-title">Orders List</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">ORDER NO.</th>
+                        <th scope="col">STATUS</th>
+                        <th scope="col">OPERATORS</th>
+                        <th scope="col">LOCATION</th>
+                        <th scope="col">DISTANCE</th>
+                        <th scope="col">START DATE</th>
+                        <th scope="col">EST DELIVERY DUE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Aquí puedes cargar datos dinámicamente desde tu API -->
+                    <tr>
+                        <th scope="row"><b>#122349</b></th>
+                        <td>
+                            <div class="tm-status-circle moving"></div>Moving
+                        </td>
+                        <td><b>Oliver Trag</b></td>
+                        <td><b>London, UK</b></td>
+                        <td><b>485 km</b></td>
+                        <td>16:00, 12 NOV 2018</td>
+                        <td>08:00, 18 NOV 2018</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Scripts específicos para el dashboard
+        $(document).ready(function() {
+            // Inicializar gráficos con datos reales
+            initializeDashboardCharts();
+        });
+
+        function initializeDashboardCharts() {
+            // Aquí puedes hacer llamadas a tu API para obtener datos reales
+            console.log("Dashboard charts initialized");
+        }
+    </script>
+}
