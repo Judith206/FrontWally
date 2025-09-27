@@ -13,6 +13,9 @@ builder.Services.AddHttpClient<ApiService>(client =>
 });
 
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<CotizacionService>();
+builder.Services.AddScoped<ProductoService>();
+
 
 // Configurar la autenticación con cookies
 builder.Services.AddAuthentication("AuthCookie")
