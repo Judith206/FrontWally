@@ -46,26 +46,30 @@ namespace FrontWally.Controllers
         {
             try
             {
+                // Validar el modelo primero
                 if (!ModelState.IsValid)
                 {
                     return View(createDto);
                 }
 
-                // Convertir la imagen a byte[]
-                if (createDto.ImagenFile != null && createDto.ImagenFile.Length > 0)
-                {
-                    using (var ms = new MemoryStream())
-                    {
-                        await createDto.ImagenFile.CopyToAsync(ms);
-                        createDto.Imagen = ms.ToArray();
-                    }
-                }
-                else
+                // Verificar que se haya subido una imagen
+                if (createDto.ImagenFile == null || createDto.ImagenFile.Length == 0)
                 {
                     ModelState.AddModelError("ImagenFile", "Debes seleccionar una imagen.");
                     return View(createDto);
                 }
 
+                // Convertir la imagen a byte[]
+                using (var ms = new MemoryStream())
+                {
+                    await createDto.ImagenFile.CopyToAsync(ms);
+                    createDto.Imagen = ms.ToArray();
+                }
+
+                // Asignar el usuario que crea el producto
+                createDto.UsuarioId = GetUsuarioId();
+
+                // Llamada al servicio para enviar al API
                 var authToken = GetToken();
                 var resultado = await _productoService.CreateProductoAsync(createDto, authToken);
 
@@ -84,6 +88,7 @@ namespace FrontWally.Controllers
                 return View(createDto);
             }
         }
+
 
         // GET: Mostrar formulario de edición
         [HttpGet("Editar/{id}")]

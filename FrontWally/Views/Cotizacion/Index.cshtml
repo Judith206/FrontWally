@@ -1,0 +1,111 @@
+﻿@model IEnumerable<FrontWally.DTOs.CotizacionDTOs.CotizacionDTO>
+
+@{
+    ViewData["Title"] = "Cotizaciones";
+}
+
+<div class="container mt-5">
+    <div class="row tm-content-row">
+        <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8 tm-block-col">
+            <div class="tm-bg-primary-dark tm-block tm-block-products">
+                <div class="tm-product-table-container">
+                    <table class="table table-hover tm-table-small tm-product-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">&nbsp;</th>
+                                <th scope="col">CONTACTO</th>
+                                <th scope="col">PRODUCTO</th>
+                                <th scope="col">FECHA</th>
+                                <th scope="col">USUARIO</th>
+                                <th scope="col">&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var cotizacion in Model)
+                            {
+                                <tr>
+                                    <th scope="row"><input type="checkbox" /></th>
+                                    <td class="tm-product-name">@cotizacion.Contacto</td>
+                                    <td>@cotizacion.ProductoNombre</td>
+                                    <td>@cotizacion.Fecha.ToString("dd MMM yyyy")</td>
+                                    <td>@cotizacion.UsuarioNombre</td>
+                                    <td>
+                                        <a asp-action="Editar" asp-route-id="@cotizacion.Id" class="tm-product-edit-link mr-2">
+                                            <i class="fas fa-edit tm-product-edit-icon"></i>
+                                        </a>
+                                        <a asp-action="Eliminar" asp-route-id="@cotizacion.Id" class="tm-product-delete-link">
+                                            <i class="far fa-trash-alt tm-product-delete-icon"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <!-- table container -->
+                <a asp-controller="Cotizacion" asp-action="Crear" class="btn btn-primary btn-block text-uppercase mb-3">
+                    Nueva Cotización
+                </a>
+                <div class="row">
+                    <div class="col-md-6">
+                        <a asp-action="MisCotizaciones" class="btn btn-primary btn-block text-uppercase">
+                            Mis Cotizaciones
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-primary btn-block text-uppercase">
+                            Exportar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 tm-block-col">
+            <div class="tm-bg-primary-dark tm-block tm-block-product-categories">
+                <h2 class="tm-block-title">Filtros</h2>
+                <div class="tm-product-table-container">
+                    <form asp-action="PorFecha" method="get" class="mb-4">
+                        <div class="form-group mb-3">
+                            <label class="control-label">Fecha Inicio</label>
+                            <input type="date" name="fechaInicio" class="form-control validate" />
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="control-label">Fecha Fin</label>
+                            <input type="date" name="fechaFin" class="form-control validate" />
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block text-uppercase">
+                            Filtrar por Fecha
+                        </button>
+                    </form>
+
+                    <form asp-action="Buscar" method="get" class="mb-3">
+                        <div class="form-group mb-3">
+                            <label class="control-label">Buscar Contacto</label>
+                            <input type="text" name="termino" class="form-control validate" placeholder="Nombre del contacto..." />
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block text-uppercase">
+                            Buscar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(function() {
+            $(".tm-product-name").on("click", function() {
+                window.location.href = $(this).closest('tr').find('.tm-product-edit-link').attr('href');
+            });
+
+            // Establecer fechas por defecto para el filtro
+            var today = new Date();
+            var firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+
+            $('input[name="fechaInicio"]').val(firstDay.toISOString().split('T')[0]);
+            $('input[name="fechaFin"]').val(today.toISOString().split('T')[0]);
+        });
+    </script>
+}

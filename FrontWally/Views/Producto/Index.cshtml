@@ -34,12 +34,15 @@
                             </tbody>
                         </table>
                     </div>
-                    <a
-                    asp-controller="Producto" asp-action="Crear"
-                       class="btn btn-primary btn-block text-uppercase mb-3">Agregar Producto Nuevo</a>
-                    <button class="btn btn-primary btn-block text-uppercase">
-                        Eliminar Producto 
-                    </button>
+                    <div class="d-flex flex-column">
+                        <a asp-controller="Producto" asp-action="Crear"
+                           class="btn btn-primary w-100 text-uppercase mb-3">
+                            Agregar Producto Nuevo
+                        </a>
+                        <button class="btn btn-primary w-100 text-uppercase">
+                            Eliminar Producto
+                        </button>
+                    </div>
                 </div>
             </div>
 
