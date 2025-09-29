@@ -59,7 +59,7 @@ namespace FrontWally.Controllers
         }
 
         // GET: Mostrar formulario de creación
-        [HttpGet("Crear")]
+        [HttpGet]
         public async Task<IActionResult> Crear()
         {
             try
@@ -78,7 +78,7 @@ namespace FrontWally.Controllers
         }
 
         // POST: Crear nueva cotización
-        [HttpPost("Crear")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Crear(CotizacionCreateDTO createDto)
         {

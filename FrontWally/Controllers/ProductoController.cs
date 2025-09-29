@@ -32,39 +32,15 @@ namespace FrontWally.Controllers
             }
         }
 
-        // GET: Mostrar detalles de un producto
-        [HttpGet("Detalles/{id}")]
-        public async Task<IActionResult> Detalles(int id)
-        {
-            try
-            {
-                var authToken = GetToken();
-                var producto = await _productoService.GetProductoDetailAsync(id, authToken);
-
-                if (producto == null)
-                {
-                    TempData["Error"] = "Producto no encontrado";
-                    return RedirectToAction(nameof(Index));
-                }
-
-                return View(producto);
-            }
-            catch (Exception ex)
-            {
-                TempData["Error"] = "Error al cargar el producto: " + ex.Message;
-                return RedirectToAction(nameof(Index));
-            }
-        }
-
         // GET: Mostrar formulario de creación
-        [HttpGet("Crear")]
+        [HttpGet]
         public IActionResult Crear()
         {
             return View();
         }
 
         // POST: Crear nuevo producto
-        [HttpPost("Crear")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Crear(ProductoCreateDTO createDto)
         {
@@ -72,6 +48,21 @@ namespace FrontWally.Controllers
             {
                 if (!ModelState.IsValid)
                 {
+                    return View(createDto);
+                }
+
+                // Convertir la imagen a byte[]
+                if (createDto.ImagenFile != null && createDto.ImagenFile.Length > 0)
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        await createDto.ImagenFile.CopyToAsync(ms);
+                        createDto.Imagen = ms.ToArray();
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("ImagenFile", "Debes seleccionar una imagen.");
                     return View(createDto);
                 }
 
@@ -146,6 +137,16 @@ namespace FrontWally.Controllers
                     return View(updateDto);
                 }
 
+                // Si sube nueva imagen, reemplazar
+                if (updateDto.ImagenFile != null && updateDto.ImagenFile.Length > 0)
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        await updateDto.ImagenFile.CopyToAsync(ms);
+                        updateDto.Imagen = ms.ToArray();
+                    }
+                }
+
                 var authToken = GetToken();
                 var resultado = await _productoService.UpdateProductoAsync(updateDto, authToken);
 
@@ -200,13 +201,9 @@ namespace FrontWally.Controllers
                 var resultado = await _productoService.DeleteProductoAsync(id, authToken);
 
                 if (resultado)
-                {
                     TempData["Success"] = "Producto eliminado exitosamente";
-                }
                 else
-                {
                     TempData["Error"] = "Error al eliminar el producto";
-                }
 
                 return RedirectToAction(nameof(Index));
             }
@@ -227,13 +224,9 @@ namespace FrontWally.Controllers
                 List<ProductoReadDTO> productos;
 
                 if (string.IsNullOrEmpty(termino))
-                {
                     productos = await _productoService.GetAllProductosAsync(authToken);
-                }
                 else
-                {
                     productos = await _productoService.SearchProductosAsync(termino, authToken);
-                }
 
                 return View("Index", productos);
             }
@@ -263,10 +256,7 @@ namespace FrontWally.Controllers
             }
         }
 
-        private string GetToken()
-        {
-            return string.Empty;
-        }
+        private string GetToken() => string.Empty;
 
         private int GetUsuarioId()
         {

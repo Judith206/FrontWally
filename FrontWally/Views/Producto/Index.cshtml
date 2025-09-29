@@ -1,0 +1,66 @@
+﻿@model IEnumerable<FrontWally.DTOs.ProductoDTOs.ProductoReadDTO>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Productos y Categorías</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/templatemo-style.css">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <!-- Sección Productos -->
+            <div class="col-lg-8 mb-4">
+                <div class="tm-bg-primary-dark tm-block tm-block-products">
+                    <h2 class="tm-block-title">Productos</h2>
+                    <div class="tm-product-table-container">
+                        <table class="table table-hover tm-table-small tm-product-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">&nbsp;</th>
+                                    <th scope="col">NOMBRE</th>
+                                    <th scope="col">DESCRIPCION</th>
+                                    <th scope="col">ESTADO</th>
+                                    <th scope="col">PRECIO</th>
+                                    <th scope="col">USUARIO</th>
+                                    <th scope="col">&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Productos vacíos -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <a
+                    asp-controller="Producto" asp-action="Crear"
+                       class="btn btn-primary btn-block text-uppercase mb-3">Agregar Producto Nuevo</a>
+                    <button class="btn btn-primary btn-block text-uppercase">
+                        Eliminar Producto 
+                    </button>
+                </div>
+            </div>
+
+            <!-- Sección Categorías -->
+            <div class="col-lg-4 mb-4">
+                <div class="tm-bg-primary-dark tm-block tm-block-product-categories">
+                    <h2 class="tm-block-title">Categorías de Productos</h2>
+                    <div class="tm-product-table-container">
+                        <table class="table tm-table-small tm-product-table">
+                            <tbody>
+                                <!-- Categorías vacías -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <button class="btn btn-primary btn-block text-uppercase mb-3">Agregar Categoria Nueva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+</body>
+</html>

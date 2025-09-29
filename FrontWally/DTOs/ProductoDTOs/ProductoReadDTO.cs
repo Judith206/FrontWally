@@ -7,7 +7,7 @@
         public string Descripcion { get; set; } = null!;
         public string Estado { get; set; } = null!;
         public decimal Precio { get; set; }
-        public string Imagen { get; set; } = null!;
+        public byte[] Imagen { get; set; } = null!;
         public int IdUsuario { get; set; }
     }
 }
