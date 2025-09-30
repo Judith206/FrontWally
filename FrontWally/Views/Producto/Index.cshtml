@@ -11,6 +11,7 @@
 
 <body>
     <div class="container mt-5">
+
         <div class="row">
             <!-- Sección Productos -->
             <div class="col-lg-8 mb-4">
@@ -25,29 +26,31 @@
                                     <th scope="col">DESCRIPCION</th>
                                     <th scope="col">ESTADO</th>
                                     <th scope="col">PRECIO</th>
-                                    <th scope="col">USUARIO</th>
+                                    
                                     <th scope="col">IMAGEN</th>
                                     @* <th scope="col">&nbsp;</th> *@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- Productos vacíos -->
-                                @foreach (var productos in Model)
+                                @foreach (var producto in Model)
                                 {
                                     <tr>
-                                        <td>@productos.Nombre</td>
-                                        <td>@productos.Descripcion</td>
-                                        <td>@(productos.Estado ? "Activo" : "Inactivo")</td>
-                                        <td>@productos.Precio</td>
-                                        <td>@productos.UsuarioId</td>
+                                        <td>@producto.Nombre</td>
+                                        <td>@producto.Descripcion</td>
+                                        <td>@(producto.Estado ? "Activo" : "Inactivo")</td>
+                                        <td>@producto.Precio.ToString("C")</td>
+                                        
                                         <td>
-                                            @if (productos.Imagen != null)
+                                            @if (producto.Imagen != null && producto.Imagen.Length > 0)
                                             {
-                                                <img src="data:image/png;base64,@Convert.ToBase64String(productos.Imagen)"
+                                                <img src="data:image/png;base64,@Convert.ToBase64String(producto.Imagen)"
                                                      alt="Imagen Producto" width="50" height="50" />
                                             }
+                                            else
+                                            {
+                                                <span>Sin imagen</span>
+                                            }
                                         </td>
-     
                                     </tr>
                                 }
                             </tbody>
@@ -64,22 +67,7 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Sección Categorías -->
-            <div class="col-lg-4 mb-4">
-                <div class="tm-bg-primary-dark tm-block tm-block-product-categories">
-                    <h2 class="tm-block-title">Categorías de Productos</h2>
-                    <div class="tm-product-table-container">
-                        <table class="table tm-table-small tm-product-table">
-                            <tbody>
-                                <!-- Categorías vacías -->
-                            </tbody>
-                        </table>
-                    </div>
-                    <button class="btn btn-primary btn-block text-uppercase mb-3">Agregar Categoria Nueva</button>
-                </div>
-            </div>
-        </div>
+        </>
     </div>
 
     <script src="js/jquery-3.3.1.min.js"></script>

@@ -41,9 +41,9 @@
                                     <option value="">Seleccionar Producto</option>
                                     @if (ViewBag.Productos != null)
                                     {
-                                        foreach (var producto in ViewBag.Productos)
+                                        foreach (var productos in ViewBag.Productos)
                                         {
-                                            <option value="@producto.IdProducto">@producto.Nombre - @producto.Precio.ToString("C")</option>
+                                            <option value="@productos.ProductoId">@productos.Nombre - @productos.Precio.ToString("C")</option>
                                         }
                                     }
                                 </select>

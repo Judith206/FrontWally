@@ -286,5 +286,49 @@ namespace FrontWally.Controllers
             var userIdClaim = User.FindFirst("UserId");
             return userIdClaim != null ? int.Parse(userIdClaim.Value) : 0;
         }
+
+
+
+
+        [HttpGet("TestData")]
+        public IActionResult TestData()
+        {
+            // Datos de prueba PARA VERIFICAR que la vista funciona
+            var testProductos = new List<ProductoReadDTO>
+    {
+        new ProductoReadDTO
+        {
+            Id = 1,
+            Nombre = "PRODUCTO TEST 1",
+            Descripcion = "Esta es una descripción de prueba 1",
+            Estado = true,
+            Precio = 99.99m,
+            UsuarioId = 4,
+            Imagen = null
+        },
+        new ProductoReadDTO
+        {
+            Id = 2,
+            Nombre = "PRODUCTO TEST 2",
+            Descripcion = "Esta es una descripción de prueba 2",
+            Estado = false,
+            Precio = 149.50m,
+            UsuarioId = 4,
+            Imagen = null
+        },
+        new ProductoReadDTO
+        {
+            Id = 3,
+            Nombre = "PRODUCTO TEST 3",
+            Descripcion = "Esta es una descripción de prueba 3",
+            Estado = true,
+            Precio = 199.99m,
+            UsuarioId = 4,
+            Imagen = null
+        }
+    };
+
+            return View("Index", testProductos);
+        }
     }
 }

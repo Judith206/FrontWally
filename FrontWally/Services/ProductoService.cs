@@ -22,7 +22,7 @@ namespace FrontWally.Services
                 Console.WriteLine($"Enviando producto: {createDto.Nombre}");
                 Console.WriteLine($"Imagen tamaño: {createDto.Imagen?.Length ?? 0} bytes");
 
-                return await _apiService.PostAsync<ProductoCreateDTO, ProductoReadDTO>("producto", createDto, token);
+                return await _apiService.PostAsync<ProductoCreateDTO, ProductoReadDTO>("productos", createDto, token);
             }
             catch (Exception ex)
             {
@@ -34,61 +34,61 @@ namespace FrontWally.Services
         // Obtener todos los productos
         public async Task<List<ProductoReadDTO>> GetAllProductosAsync(string token = null)
         {
-            return await _apiService.GetAllAsync<ProductoReadDTO>("api/productos", token);
+            return await _apiService.GetAllAsync<ProductoReadDTO>("Producto/productos", token);
         }
 
         // Obtener producto por ID (versión simple)
         public async Task<ProductoReadDTO> GetProductoByIdAsync(int id, string token = null)
         {
-            return await _apiService.GetByIdAsync<ProductoReadDTO>("api/productos", id, token);
+            return await _apiService.GetByIdAsync<ProductoReadDTO>("productos", id, token);
         }
 
         // Obtener detalles completos del producto (con usuario y cotizaciones)
         public async Task<ProductoDetailDTO> GetProductoDetailAsync(int id, string token = null)
         {
-            return await _apiService.GetByIdAsync<ProductoDetailDTO>("api/productos/detail", id, token);
+            return await _apiService.GetByIdAsync<ProductoDetailDTO>("productos/detail", id, token);
         }
 
         // Obtener productos por usuario
         public async Task<List<ProductoReadDTO>> GetProductosByUsuarioAsync(int usuarioId, string token = null)
         {
-            return await _apiService.GetAllAsync<ProductoReadDTO>($"api/productos/usuario/{usuarioId}", token);
+            return await _apiService.GetAllAsync<ProductoReadDTO>($"productos/usuario/{usuarioId}", token);
         }
 
         // Obtener productos por estado
         public async Task<List<ProductoReadDTO>> GetProductosByEstadoAsync(string estado, string token = null)
         {
-            return await _apiService.GetAllAsync<ProductoReadDTO>($"api/productos/estado/{estado}", token);
+            return await _apiService.GetAllAsync<ProductoReadDTO>($"productos/estado/{estado}", token);
         }
 
         // Actualizar producto
         public async Task<ProductoReadDTO> UpdateProductoAsync(ProductoUpdateDTO updateDto, string token = null)
         {
-            return await _apiService.PutAsyn<ProductoUpdateDTO, ProductoReadDTO>("api/productos", updateDto.IdProducto, updateDto, token);
+            return await _apiService.PutAsyn<ProductoUpdateDTO, ProductoReadDTO>("productos", updateDto.IdProducto, updateDto, token);
         }
 
         // Eliminar producto
         public async Task<bool> DeleteProductoAsync(int id, string token = null)
         {
-            return await _apiService.DeleteAsync("api/productos", id, token);
+            return await _apiService.DeleteAsync("productos", id, token);
         }
 
         // Buscar productos por nombre (búsqueda parcial)
         public async Task<List<ProductoReadDTO>> SearchProductosAsync(string searchTerm, string token = null)
         {
-            return await _apiService.GetAllAsync<ProductoReadDTO>($"api/productos/search/{searchTerm}", token);
+            return await _apiService.GetAllAsync<ProductoReadDTO>($"productos/search/{searchTerm}", token);
         }
 
         // Obtener productos por rango de precio
         public async Task<List<ProductoReadDTO>> GetProductosByPrecioRangeAsync(decimal precioMin, decimal precioMax, string token = null)
         {
-            return await _apiService.GetAllAsync<ProductoReadDTO>($"api/productos/precio?precioMin={precioMin}&precioMax={precioMax}", token);
+            return await _apiService.GetAllAsync<ProductoReadDTO>($"productos/precio?precioMin={precioMin}&precioMax={precioMax}", token);
         }
 
         // Obtener productos activos
         public async Task<List<ProductoReadDTO>> GetProductosActivosAsync(string token = null)
         {
-            return await _apiService.GetAllAsync<ProductoReadDTO>("api/productos/activos", token);
+            return await _apiService.GetAllAsync<ProductoReadDTO>("productos/activos", token);
         }
     }
 }
