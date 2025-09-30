@@ -20,17 +20,36 @@
                         <table class="table table-hover tm-table-small tm-product-table">
                             <thead>
                                 <tr>
-                                    <th scope="col">&nbsp;</th>
+                                    @* <th scope="col">&nbsp;</th> *@
                                     <th scope="col">NOMBRE</th>
                                     <th scope="col">DESCRIPCION</th>
                                     <th scope="col">ESTADO</th>
                                     <th scope="col">PRECIO</th>
                                     <th scope="col">USUARIO</th>
-                                    <th scope="col">&nbsp;</th>
+                                    <th scope="col">IMAGEN</th>
+                                    @* <th scope="col">&nbsp;</th> *@
                                 </tr>
                             </thead>
                             <tbody>
                                 <!-- Productos vacíos -->
+                                @foreach (var productos in Model)
+                                {
+                                    <tr>
+                                        <td>@productos.Nombre</td>
+                                        <td>@productos.Descripcion</td>
+                                        <td>@(productos.Estado ? "Activo" : "Inactivo")</td>
+                                        <td>@productos.Precio</td>
+                                        <td>@productos.UsuarioId</td>
+                                        <td>
+                                            @if (productos.Imagen != null)
+                                            {
+                                                <img src="data:image/png;base64,@Convert.ToBase64String(productos.Imagen)"
+                                                     alt="Imagen Producto" width="50" height="50" />
+                                            }
+                                        </td>
+     
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
