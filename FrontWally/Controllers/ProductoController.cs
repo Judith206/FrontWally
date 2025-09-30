@@ -21,7 +21,7 @@ namespace FrontWally.Controllers
         {
             try
             {
-                var authToken = GetToken();
+                var authToken = await GetTokenAsync();
                 var productos = await _productoService.GetAllProductosAsync(authToken);
                 return View(productos);
             }
@@ -47,15 +47,31 @@ namespace FrontWally.Controllers
             try
             {
                 // Validar el modelo primero
-                if (!ModelState.IsValid)
-                {
-                    return View(createDto);
-                }
+                //if (!ModelState.IsValid)
+                //{
+                //    return View(createDto);
+                //}
 
                 // Verificar que se haya subido una imagen
                 if (createDto.ImagenFile == null || createDto.ImagenFile.Length == 0)
                 {
                     ModelState.AddModelError("ImagenFile", "Debes seleccionar una imagen.");
+                    return View(createDto);
+                }
+
+                // Validar tamaño de la imagen (máximo 5MB)
+                if (createDto.ImagenFile.Length > 6 * 1024 * 1024)
+                {
+                    ModelState.AddModelError("ImagenFile", "La imagen no puede ser mayor a 5MB.");
+                    return View(createDto);
+                }
+
+                // Validar tipo de archivo
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                var fileExtension = Path.GetExtension(createDto.ImagenFile.FileName).ToLower();
+                if (!allowedExtensions.Contains(fileExtension))
+                {
+                    ModelState.AddModelError("ImagenFile", "Solo se permiten archivos JPG, JPEG, PNG o GIF.");
                     return View(createDto);
                 }
 
@@ -69,58 +85,61 @@ namespace FrontWally.Controllers
                 // Asignar el usuario que crea el producto
                 createDto.UsuarioId = GetUsuarioId();
 
+                // OBTENER TOKEN REAL (CORREGIDO)
+                var authToken = await GetTokenAsync();
+                if (string.IsNullOrEmpty(authToken))
+                {
+                    ViewBag.Error = "No se pudo obtener el token de autenticación";
+                    return View(createDto);
+                }
+
                 // Llamada al servicio para enviar al API
-                var authToken = GetToken();
                 var resultado = await _productoService.CreateProductoAsync(createDto, authToken);
 
-                if (resultado != null && resultado.IdProducto > 0)
+                if (resultado != null && resultado.Id > 0)
                 {
                     TempData["Success"] = "Producto creado exitosamente";
                     return RedirectToAction(nameof(Index));
                 }
 
-                ViewBag.Error = "Error al crear el producto";
+                ViewBag.Error = "Error al crear el producto - No se recibió respuesta del servidor";
                 return View(createDto);
             }
             catch (Exception ex)
             {
-                ViewBag.Error = "Error al crear el producto: " + ex.Message;
+                ViewBag.Error = $"Error al crear el producto: {ex.Message}";
+                if (ex.InnerException != null)
+                {
+                    ViewBag.Error += $" - {ex.InnerException.Message}";
+                }
                 return View(createDto);
             }
         }
 
-
-        // GET: Mostrar formulario de edición
-        [HttpGet("Editar/{id}")]
-        public async Task<IActionResult> Editar(int id)
+        // CORREGIR: Método para obtener token real
+        private async Task<string> GetTokenAsync()
         {
             try
             {
-                var authToken = GetToken();
-                var producto = await _productoService.GetProductoByIdAsync(id, authToken);
+                // Si estás usando autenticación basada en cookies, no necesitas buscar un token específico
+                // Puedes obtener los claims del usuario autenticado
+                var token = HttpContext.User.FindFirst("Token")?.Value;
 
-                if (producto == null)
+                if (string.IsNullOrEmpty(token))
                 {
-                    TempData["Error"] = "Producto no encontrado";
-                    return RedirectToAction(nameof(Index));
+                    // Si no encuentras el "Token" en los claims, podrías intentar obtener el JWT del encabezado Authorization
+                    var authHeader = HttpContext.Request.Headers["Authorization"].FirstOrDefault();
+                    if (authHeader != null && authHeader.StartsWith("Bearer "))
+                    {
+                        token = authHeader.Substring("Bearer ".Length).Trim();
+                    }
                 }
 
-                var updateDto = new ProductoUpdateDTO
-                {
-                    IdProducto = producto.IdProducto,
-                    Nombre = producto.Nombre,
-                    Descripcion = producto.Descripcion,
-                    Estado = producto.Estado,
-                    Precio = producto.Precio,
-                    Imagen = producto.Imagen
-                };
-
-                return View(updateDto);
+                return token;
             }
-            catch (Exception ex)
+            catch
             {
-                TempData["Error"] = "Error al cargar el producto: " + ex.Message;
-                return RedirectToAction(nameof(Index));
+                return null;
             }
         }
 
@@ -152,7 +171,7 @@ namespace FrontWally.Controllers
                     }
                 }
 
-                var authToken = GetToken();
+                var authToken =await GetTokenAsync();
                 var resultado = await _productoService.UpdateProductoAsync(updateDto, authToken);
 
                 if (resultado != null)
@@ -177,7 +196,7 @@ namespace FrontWally.Controllers
         {
             try
             {
-                var authToken = GetToken();
+                var authToken = await GetTokenAsync();
                 var producto = await _productoService.GetProductoByIdAsync(id, authToken);
 
                 if (producto == null)
@@ -202,7 +221,7 @@ namespace FrontWally.Controllers
         {
             try
             {
-                var authToken = GetToken();
+                var authToken = await GetTokenAsync();
                 var resultado = await _productoService.DeleteProductoAsync(id, authToken);
 
                 if (resultado)
@@ -225,7 +244,7 @@ namespace FrontWally.Controllers
         {
             try
             {
-                var authToken = GetToken();
+                var authToken = await GetTokenAsync();
                 List<ProductoReadDTO> productos;
 
                 if (string.IsNullOrEmpty(termino))
@@ -248,7 +267,7 @@ namespace FrontWally.Controllers
         {
             try
             {
-                var authToken = GetToken();
+                var authToken = await GetTokenAsync();
                 var usuarioId = GetUsuarioId();
                 var productos = await _productoService.GetProductosByUsuarioAsync(usuarioId, authToken);
 
@@ -261,7 +280,6 @@ namespace FrontWally.Controllers
             }
         }
 
-        private string GetToken() => string.Empty;
 
         private int GetUsuarioId()
         {

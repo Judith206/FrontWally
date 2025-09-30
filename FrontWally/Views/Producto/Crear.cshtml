@@ -14,7 +14,6 @@
                     </div>
                 </div>
 
-                <!-- IMPORTANTE: enctype="multipart/form-data" para enviar la imagen -->
                 <form asp-action="Crear"
                       asp-controller="Producto"
                       method="post"
@@ -34,11 +33,8 @@
                                 <span asp-validation-for="Nombre" class="text-danger"></span>
                             </div>
 
-                            <div class="form-group mb-3">
-                                <label asp-for="Nombre" class="control-label">Nombre del Usuario</label>
-                                <input asp-for="Nombre" class="form-control validate" required />
-                                <span asp-validation-for="UsuarioId" class="text-danger"></span>
-                            </div>
+                            <!-- CORREGIDO: Campo oculto para UsuarioId -->
+                           <input type="hidden" asp-for="UsuarioId" /> 
 
                             <div class="form-group mb-3">
                                 <label asp-for="Descripcion" class="control-label">Descripción</label>
@@ -62,7 +58,6 @@
                             </div>
                         </div>
 
-
                         <!-- Columna derecha (Imagen) -->
                         <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
                             <div class="tm-product-img-dummy mx-auto"
@@ -71,10 +66,9 @@
                             </div>
 
                             <div class="form-group mb-3">
-                                <label class="control-label">Imagen del Producto</label>
-                                <!-- Cambiado solo el name a ImagenFile -->
+                                <label asp-for="ImagenFile" class="control-label">Imagen del Producto</label>
                                 <input id="fileInput"
-                                       name="ImagenFile"
+                                       asp-for="ImagenFile"
                                        type="file"
                                        accept="image/*"
                                        class="form-control-file"
@@ -94,7 +88,6 @@
                         </div>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>

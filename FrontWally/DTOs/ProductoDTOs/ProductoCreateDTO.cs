@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace FrontWally.DTOs.ProductoDTOs
 {
@@ -9,7 +10,7 @@ namespace FrontWally.DTOs.ProductoDTOs
         public bool Estado { get; set; } 
         public decimal Precio { get; set; }
 
-       
+        [JsonIgnore]
         public IFormFile? ImagenFile { get; set; }
 
         public byte[]? Imagen { get; set; }  // Esta es la que va al API

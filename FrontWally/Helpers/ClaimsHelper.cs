@@ -5,14 +5,15 @@ namespace FrontWally.Helpers
 {
     public class ClaimsHelper
     {
-        public static ClaimsPrincipal CrearClaimsPrincipal(LoginResponseDTO usurio)
+        public static ClaimsPrincipal CrearClaimsPrincipal(LoginResponseDTO usuario)
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, usurio.Nombre),
-                new Claim(ClaimTypes.Email, usurio.Email),
-                new Claim(ClaimTypes.Role, usurio.Rol),
-                new Claim("Token", usurio.Token)
+                new Claim(ClaimTypes.Name, usuario.Nombre),
+                new Claim(ClaimTypes.Email, usuario.Email),
+                new Claim(ClaimTypes.Role, usuario.Rol),
+                new Claim("Token", usuario.Token),
+                new Claim("UserId", usuario.Id.ToString()) // ✅ Este es el claim que faltaba
             };
 
             var identity = new ClaimsIdentity(claims, "AuthCookie");

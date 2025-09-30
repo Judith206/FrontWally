@@ -14,9 +14,21 @@ namespace FrontWally.Services
         }
 
         // Crear un nuevo producto
+        // Crear un nuevo producto (AGREGAR LOGGING PARA DEBUG)
         public async Task<ProductoReadDTO> CreateProductoAsync(ProductoCreateDTO createDto, string token = null)
         {
-            return await _apiService.PostAsync<ProductoCreateDTO, ProductoReadDTO>("api/productos", createDto, token);
+            try
+            {
+                Console.WriteLine($"Enviando producto: {createDto.Nombre}");
+                Console.WriteLine($"Imagen tamaño: {createDto.Imagen?.Length ?? 0} bytes");
+
+                return await _apiService.PostAsync<ProductoCreateDTO, ProductoReadDTO>("producto", createDto, token);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error en CreateProductoAsync: {ex.Message}");
+                throw;
+            }
         }
 
         // Obtener todos los productos

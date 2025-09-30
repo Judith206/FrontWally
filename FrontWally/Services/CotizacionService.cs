@@ -16,7 +16,7 @@ namespace FrontWally.Services
         // Crear una nueva cotización
         public async Task<CotizacionDTO> CreateCotizacionAsync(CotizacionCreateDTO createDto, string token = null)
         {
-            return await _apiService.PostAsync<CotizacionCreateDTO, CotizacionDTO>("api/cotizaciones", createDto, token);
+            return await _apiService.PostAsync<CotizacionCreateDTO, CotizacionDTO>("cotizaciones", createDto, token);
         }
 
         // Obtener todas las cotizaciones
