@@ -1,5 +1,105 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model FrontWally.DTOs.ProductoDTOs.ProductoReadDTO
+
 @{
+    ViewData["Title"] = "Eliminar Producto";
+}
+
+<div class="container tm-mt-big tm-mb-big">
+    <div class="row">
+        <div class="col-xl-6 col-lg-8 col-md-10 col-sm-12 mx-auto">
+            <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+                <div class="row">
+                    <div class="col-12">
+                        <h2 class="tm-block-title d-inline-block text-danger">Eliminar Producto</h2>
+                    </div>
+                </div>
+
+                <!-- Información del Producto -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label class="control-label font-weight-bold">Nombre:</label>
+                            <p class="form-control-plaintext text-white">@Model.Nombre</p>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="control-label font-weight-bold">Descripción:</label>
+                            <p class="form-control-plaintext text-white">@Model.Descripcion</p>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="control-label font-weight-bold">Precio:</label>
+                            <p class="form-control-plaintext text-white">@Model.Precio.ToString("C")</p>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="control-label font-weight-bold">Estado:</label>
+                            <p class="form-control-plaintext text-white">
+                                @if (Model.Estado)
+                                {
+                                    <span class="badge badge-success">Activo</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-secondary">Inactivo</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 text-center">
+                        <div class="mb-3">
+                            <label class="control-label font-weight-bold d-block">Imagen:</label>
+                            @if (Model.Imagen != null && Model.Imagen.Length > 0)
+                            {
+                                <img src="data:image/png;base64,@Convert.ToBase64String(Model.Imagen)"
+                                     alt="Imagen Producto"
+                                     class="img-fluid rounded shadow"
+                                     style="max-height: 200px;" />
+                            }
+                            else
+                            {
+                                <div class="tm-product-img-dummy mx-auto">
+                                    <i class="fas fa-image tm-upload-icon"></i>
+                                </div>
+                                <p class="text-muted mt-2">Sin imagen</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formulario de Eliminación  -->
+                <form asp-action="EliminarConfirmed" asp-controller="Producto" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@Model.Id" />
+
+                    <div class="row mt-4">
+                        <div class="col-6">
+                            <button type="submit"
+                                    class="btn btn-danger btn-block text-uppercase"
+                                    onclick="return confirm('¿Estás completamente seguro de eliminar este producto?')">
+                                <i class="fas fa-trash-alt mr-2"></i>Eliminar
+                            </button>
+                        </div>
+                        <div class="col-6">
+                            <a asp-action="Index" class="btn btn-secondary btn-block text-uppercase">
+                                <i class="fas fa-times mr-2"></i>Cancelar
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Prevenir envío doble del formulario
+            $('form').submit(function () {
+                $('button[type="submit"]').prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-2"></i>Eliminando...');
+            });
+        });
+    </script>
 }

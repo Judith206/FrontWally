@@ -35,7 +35,7 @@ namespace FrontWally.Controllers
         }
 
         // GET: Mostrar detalles de una cotización
-        [HttpGet("Detalles/{id}")]
+        [HttpGet("Cotizacion/Detalles/{id}")]
         public async Task<IActionResult> Detalles(int id)
         {
             try
@@ -118,7 +118,7 @@ namespace FrontWally.Controllers
         }
 
         // GET: Mostrar formulario de edición
-        [HttpGet("Editar/{id}")]
+        [HttpGet("Cotizacion/Editar/{id}")]
         public async Task<IActionResult> Editar(int id)
         {
             try
@@ -154,7 +154,7 @@ namespace FrontWally.Controllers
         }
 
         // POST: Actualizar cotización
-        [HttpPost("Editar/{id}")]
+        [HttpPost("Cotizacion/Editar/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Editar(int id, CotizacionCreateDTO updateDto)
         {
@@ -197,7 +197,7 @@ namespace FrontWally.Controllers
         }
 
         // GET: Mostrar confirmación de eliminación
-        [HttpGet("Eliminar/{id}")]
+        [HttpGet("Cotizacion/Eliminar/{id}")]
         public async Task<IActionResult> Eliminar(int id)
         {
             try
@@ -221,7 +221,7 @@ namespace FrontWally.Controllers
         }
 
         // POST: Eliminar cotización
-        [HttpPost("Eliminar/{id}")]
+        [HttpPost("Cotizacion/Eliminar/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EliminarConfirmado(int id)
         {

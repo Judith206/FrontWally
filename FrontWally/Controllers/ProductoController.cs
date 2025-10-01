@@ -191,7 +191,7 @@ namespace FrontWally.Controllers
         }
 
         // GET: Mostrar confirmación de eliminación
-        [HttpGet("Eliminar/{id}")]
+        [HttpGet("Producto/Eliminar/{id}")]
         public async Task<IActionResult> Eliminar(int id)
         {
             try
@@ -215,9 +215,9 @@ namespace FrontWally.Controllers
         }
 
         // POST: Eliminar producto
-        [HttpPost("Eliminar/{id}")]
+        [HttpPost("Producto/EliminarConfirmed")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EliminarConfirmado(int id)
+        public async Task<IActionResult> EliminarConfirmed(int id)
         {
             try
             {
