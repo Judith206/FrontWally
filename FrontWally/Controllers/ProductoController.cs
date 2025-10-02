@@ -142,7 +142,42 @@ namespace FrontWally.Controllers
                 return null;
             }
         }
+        // GET: Mostrar formulario de edición
+        // GET: Mostrar formulario de edición
+        [HttpGet("Editar/{id}")]
+        public async Task<IActionResult> Editar(int id)
+        {
+            try
+            {
+                var authToken = await GetTokenAsync();
+                var producto = await _productoService.GetProductoByIdAsync(id, authToken);
 
+                if (producto == null)
+                {
+                    TempData["Error"] = "Producto no encontrado";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                // Convertir ProductoReadDTO a ProductoUpdateDTO
+                var updateDto = new ProductoUpdateDTO
+                {
+                    Id = producto.Id,
+                    Nombre = producto.Nombre,
+                    Descripcion = producto.Descripcion,
+                    Precio = producto.Precio,
+                    Estado = producto.Estado,
+                    Imagen = producto.Imagen,
+                    UsuarioId = producto.UsuarioId // Importante: incluir el UsuarioId
+                };
+
+                return View(updateDto);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Error al cargar el producto para editar: " + ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
+        }
         // POST: Actualizar producto
         [HttpPost("Editar/{id}")]
         [ValidateAntiForgeryToken]
@@ -150,7 +185,7 @@ namespace FrontWally.Controllers
         {
             try
             {
-                if (id != updateDto.IdProducto)
+                if (id != updateDto.Id)
                 {
                     TempData["Error"] = "ID del producto no coincide";
                     return RedirectToAction(nameof(Index));
@@ -161,17 +196,59 @@ namespace FrontWally.Controllers
                     return View(updateDto);
                 }
 
-                // Si sube nueva imagen, reemplazar
+                // Obtener el producto actual para mantener el UsuarioId
+                var authToken = await GetTokenAsync();
+                var productoActual = await _productoService.GetProductoByIdAsync(id, authToken);
+
+                if (productoActual == null)
+                {
+                    TempData["Error"] = "Producto no encontrado";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                // Asignar el UsuarioId del producto actual (no cambia)
+                updateDto.UsuarioId = productoActual.UsuarioId;
+
+                // Si sube nueva imagen, procesarla
                 if (updateDto.ImagenFile != null && updateDto.ImagenFile.Length > 0)
                 {
+                    // Validar tamaño de la imagen (máximo 5MB)
+                    if (updateDto.ImagenFile.Length > 6 * 1024 * 1024)
+                    {
+                        ModelState.AddModelError("ImagenFile", "La imagen no puede ser mayor a 5MB.");
+                        return View(updateDto);
+                    }
+
+                    // Validar tipo de archivo
+                    var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                    var fileExtension = Path.GetExtension(updateDto.ImagenFile.FileName).ToLower();
+                    if (!allowedExtensions.Contains(fileExtension))
+                    {
+                        ModelState.AddModelError("ImagenFile", "Solo se permiten archivos JPG, JPEG, PNG o GIF.");
+                        return View(updateDto);
+                    }
+
+                    // Convertir la imagen a byte[]
                     using (var ms = new MemoryStream())
                     {
                         await updateDto.ImagenFile.CopyToAsync(ms);
                         updateDto.Imagen = ms.ToArray();
                     }
                 }
+                else
+                {
+                    // Mantener la imagen actual si no se sube nueva
+                    updateDto.Imagen = productoActual.Imagen;
+                }
 
-                var authToken =await GetTokenAsync();
+                // DEBUG: Mostrar datos que se envían
+                Console.WriteLine($"Enviando actualización para producto ID: {updateDto.Id}");
+                Console.WriteLine($"Nombre: {updateDto.Nombre}");
+                Console.WriteLine($"Precio: {updateDto.Precio}");
+                Console.WriteLine($"Estado: {updateDto.Estado}");
+                Console.WriteLine($"UsuarioId: {updateDto.UsuarioId}");
+                Console.WriteLine($"Tamaño de imagen: {updateDto.Imagen?.Length ?? 0} bytes");
+
                 var resultado = await _productoService.UpdateProductoAsync(updateDto, authToken);
 
                 if (resultado != null)
@@ -180,12 +257,17 @@ namespace FrontWally.Controllers
                     return RedirectToAction(nameof(Index));
                 }
 
-                ViewBag.Error = "Error al actualizar el producto";
+                ViewBag.Error = "Error al actualizar el producto - No se recibió respuesta del servidor";
                 return View(updateDto);
             }
             catch (Exception ex)
             {
-                ViewBag.Error = "Error al actualizar el producto: " + ex.Message;
+                Console.WriteLine($"Error completo: {ex}");
+                ViewBag.Error = $"Error al actualizar el producto: {ex.Message}";
+                if (ex.InnerException != null)
+                {
+                    ViewBag.Error += $" - {ex.InnerException.Message}";
+                }
                 return View(updateDto);
             }
         }

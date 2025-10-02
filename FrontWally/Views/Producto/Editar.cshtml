@@ -1,7 +1,7 @@
-﻿@model FrontWally.DTOs.ProductoDTOs.ProductoCreateDTO
+﻿@model FrontWally.DTOs.ProductoDTOs.ProductoUpdateDTO
 
 @{
-    ViewData["Title"] = "Crear Producto";
+    ViewData["Title"] = "Editar Producto";
 }
 
 <div class="container tm-mt-big tm-mb-big">
@@ -10,19 +10,30 @@
             <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
                 <div class="row">
                     <div class="col-12">
-                        <h2 class="tm-block-title d-inline-block">Agregar Producto</h2>
+                        <h2 class="tm-block-title d-inline-block">Editar Producto</h2>
                     </div>
                 </div>
 
-                <form asp-action="Crear"
+                <form asp-action="Editar"
                       asp-controller="Producto"
+                      asp-route-id="@Model.Id"
                       method="post"
                       class="tm-edit-product-form"
                       enctype="multipart/form-data">
 
                     @Html.AntiForgeryToken()
 
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="UsuarioId" />
+
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger">
+                            @ViewBag.Error
+                        </div>
+                    }
 
                     <div class="row tm-edit-product-row">
                         <!-- Columna izquierda -->
@@ -32,9 +43,6 @@
                                 <input asp-for="Nombre" class="form-control validate" required />
                                 <span asp-validation-for="Nombre" class="text-danger"></span>
                             </div>
-
-                            <!-- CORREGIDO: Campo oculto para UsuarioId -->
-                           <input type="hidden" asp-for="UsuarioId" /> 
 
                             <div class="form-group mb-3">
                                 <label asp-for="Descripcion" class="control-label">Descripción</label>
@@ -60,13 +68,29 @@
 
                         <!-- Columna derecha (Imagen) -->
                         <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
-                            <div class="tm-product-img-dummy mx-auto"
-                                 onclick="document.getElementById('fileInput').click();">
-                                <i class="fas fa-cloud-upload-alt tm-upload-icon"></i>
-                            </div>
+                            <!-- Mostrar imagen actual si existe -->
+                            @if (Model.Imagen != null && Model.Imagen.Length > 0)
+                            {
+                                <div class="text-center mb-3">
+                                    <div class="tm-product-img-dummy mx-auto" id="currentImageContainer">
+                                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Imagen)"
+                                             alt="Imagen actual del producto"
+                                             class="img-fluid d-block mx-auto"
+                                             style="max-height: 200px;">
+                                    </div>
+                                    
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="tm-product-img-dummy mx-auto"
+                                     onclick="document.getElementById('fileInput').click();">
+                                    <i class="fas fa-cloud-upload-alt tm-upload-icon"></i>
+                                </div>
+                            }
 
                             <div class="form-group mb-3">
-                                <br/>
+                                <label asp-for="ImagenFile" class="control-label">Cambiar Imagen (Opcional)</label>
                                 <input id="fileInput"
                                        asp-for="ImagenFile"
                                        type="file"
@@ -75,15 +99,16 @@
                                        style="display:none;" />
                                 <input type="button"
                                        class="btn btn-primary btn-block mx-auto"
-                                       value="SUBIR IMAGEN DEL PRODUCTO"
+                                       value="CAMBIAR IMAGEN DEL PRODUCTO"
                                        onclick="document.getElementById('fileInput').click();" />
                                 <span asp-validation-for="ImagenFile" class="text-danger"></span>
+                                
                             </div>
                         </div>
 
                         <!-- Botones -->
                         <div class="col-12">
-                            <button type="submit" class="btn btn-primary btn-block text-uppercase">Agregar Producto</button>
+                            <button type="submit" class="btn btn-primary btn-block text-uppercase">Actualizar Producto</button>
                             <a asp-action="Index" class="btn btn-secondary btn-block text-uppercase">Cancelar</a>
                         </div>
                     </div>
@@ -95,18 +120,22 @@
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
-
     <script>
         $(function () {
-            // Preview de imagen
             $('#fileInput').change(function () {
                 var file = this.files[0];
                 if (file) {
                     var reader = new FileReader();
                     reader.onload = function (e) {
-                        $('.tm-product-img-dummy').html(
-                            '<img src="' + e.target.result + '" alt="Preview" class="img-fluid d-block mx-auto">'
-                        );
+                        if ($('#currentImageContainer').length > 0) {
+                            $('#currentImageContainer').html(
+                                '<img src="' + e.target.result + '" alt="Nueva imagen" class="img-fluid d-block mx-auto" style="max-height: 200px;">'
+                            );
+                        } else {
+                            $('.tm-product-img-dummy').html(
+                                '<img src="' + e.target.result + '" alt="Nueva imagen" class="img-fluid d-block mx-auto">'
+                            );
+                        }
                     }
                     reader.readAsDataURL(file);
                 }

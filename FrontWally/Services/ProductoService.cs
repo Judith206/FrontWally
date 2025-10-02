@@ -64,7 +64,7 @@ namespace FrontWally.Services
         // Actualizar producto
         public async Task<ProductoReadDTO> UpdateProductoAsync(ProductoUpdateDTO updateDto, string token = null)
         {
-            return await _apiService.PutAsync<ProductoUpdateDTO, ProductoReadDTO>("producto", updateDto.IdProducto, updateDto, token);
+            return await _apiService.PutAsync<ProductoUpdateDTO, ProductoReadDTO>("producto", updateDto.Id, updateDto, token);
         }
 
         // Eliminar producto
