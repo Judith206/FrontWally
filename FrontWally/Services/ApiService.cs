@@ -55,7 +55,7 @@ namespace FrontWally.Services
         }
 
         //PUT generico
-        public async Task<TResponse> PutAsyn<TRequest, TResponse>(string endpoint, int id, TRequest data, string token = null)
+        public async Task<TResponse> PutAsync<TRequest, TResponse>(string endpoint, int id, TRequest data, string token = null)
         {
             AddAuthorizationHeader(token);
             var content = new StringContent(JsonSerializer.Serialize(data, _jsonOptions), Encoding.UTF8, "application/json");

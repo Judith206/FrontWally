@@ -46,7 +46,7 @@ namespace FrontWally.Services
         // Actualizar cotización
         public async Task<CotizacionDTO> UpdateCotizacionAsync(int id, CotizacionCreateDTO updateDto, string token = null)
         {
-            return await _apiService.PutAsyn<CotizacionCreateDTO, CotizacionDTO>("cotizaciones", id, updateDto, token);
+            return await _apiService.PutAsync<CotizacionCreateDTO, CotizacionDTO>("cotizaciones", id, updateDto, token);
         }
 
         // Eliminar cotización

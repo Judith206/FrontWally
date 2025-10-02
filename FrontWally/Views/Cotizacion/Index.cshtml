@@ -8,6 +8,38 @@
     <div class="row tm-content-row">
         <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8 tm-block-col">
             <div class="tm-bg-primary-dark tm-block tm-block-products">
+
+                <!-- Mensajes de éxito/error -->
+                @if (TempData["Success"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        @TempData["Success"]
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                }
+
+                @if (TempData["Error"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        @TempData["Error"]
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                }
+
+                @if (ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        @ViewBag.Error
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                }
+
                 <div class="tm-product-table-container">
                     <table class="table table-hover tm-table-small tm-product-table">
                         <thead>
@@ -15,27 +47,47 @@
                                 <th scope="col">&nbsp;</th>
                                 <th scope="col">CONTACTO</th>
                                 <th scope="col">PRODUCTO</th>
+                                <th scope="col">CANTIDAD</th>
+                                <th scope="col">PRECIO UNIT.</th>
+                                <th scope="col">TOTAL</th>
                                 <th scope="col">FECHA</th>
                                 <th scope="col">USUARIO</th>
                                 <th scope="col">&nbsp;</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var cotizacion in Model)
+                            @if (Model != null && Model.Any())
+                            {
+                                @foreach (var cotizacion in Model)
+                                {
+                                    <tr>
+                                        <th scope="row"><input type="checkbox" /></th>
+                                        <td class="tm-product-name">@cotizacion.Contacto</td>
+                                        <td>@cotizacion.ProductoNombre</td>
+                                        <td class="text-center">@cotizacion.Cantidad</td>
+                                        <td>@cotizacion.ProductoPrecio.ToString("C")</td>
+                                        <td class="font-weight-bold">@cotizacion.Total.ToString("C")</td>
+                                        <td>@cotizacion.Fecha.ToString("dd MMM yyyy")</td>
+                                        <td>@cotizacion.UsuarioNombre</td>
+                                        <td>
+                                            <a asp-action="Editar" asp-route-id="@cotizacion.Id" class="tm-product-edit-link mr-2" title="Editar">
+                                                <i class="fas fa-edit tm-product-edit-icon"></i>
+                                            </a>
+                                            <a asp-action="Eliminar" asp-route-id="@cotizacion.Id" class="tm-product-delete-link" title="Eliminar">
+                                                <i class="far fa-trash-alt tm-product-delete-icon"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
                             {
                                 <tr>
-                                    <th scope="row"><input type="checkbox" /></th>
-                                    <td class="tm-product-name">@cotizacion.Contacto</td>
-                                    <td>@cotizacion.ProductoNombre</td>
-                                    <td>@cotizacion.Fecha.ToString("dd MMM yyyy")</td>
-                                    <td>@cotizacion.UsuarioNombre</td>
-                                    <td>
-                                        <a asp-action="Editar" asp-route-id="@cotizacion.Id" class="tm-product-edit-link mr-2">
-                                            <i class="fas fa-edit tm-product-edit-icon"></i>
-                                        </a>
-                                        <a asp-action="Eliminar" asp-route-id="@cotizacion.Id" class="tm-product-delete-link">
-                                            <i class="far fa-trash-alt tm-product-delete-icon"></i>
-                                        </a>
+                                    <td colspan="9" class="text-center">
+                                        <div class="alert alert-info mt-3">
+                                            No se encontraron cotizaciones.
+                                            <a asp-action="Crear" class="alert-link">Crear la primera cotización</a>
+                                        </div>
                                     </td>
                                 </tr>
                             }
@@ -43,27 +95,42 @@
                     </table>
                 </div>
                 <!-- table container -->
-                <a asp-controller="Cotizacion" asp-action="Crear" class="btn btn-primary btn-block text-uppercase mb-3">
-                    Nueva Cotización
-                </a>
-                <div class="row">
+
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <a asp-controller="Cotizacion" asp-action="Crear" class="btn btn-primary text-uppercase">
+                        <i class="fas fa-plus mr-2"></i>Nueva Cotización
+                    </a>
+
+                    @if (Model != null && Model.Any())
+                    {
+                        <div class="text-light">
+                            <strong>Total de cotizaciones: @Model.Count()</strong> |
+                            <strong>Suma total: @Model.Sum(c => c.Total).ToString("C")</strong>
+                        </div>
+                    }
+                </div>
+
+                <div class="row mt-3">
                     <div class="col-md-6">
-                        <a asp-action="MisCotizaciones" class="btn btn-primary btn-block text-uppercase">
-                            Mis Cotizaciones
+                        <a asp-action="MisCotizaciones" class="btn btn-outline-primary btn-block text-uppercase">
+                            <i class="fas fa-user mr-2"></i>Mis Cotizaciones
                         </a>
                     </div>
                     <div class="col-md-6">
-                        <button class="btn btn-primary btn-block text-uppercase">
-                            Exportar
-                        </button>
+                        <a asp-action="Index" class="btn btn-outline-secondary btn-block text-uppercase">
+                            <i class="fas fa-sync-alt mr-2"></i>Ver Todas
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 tm-block-col">
             <div class="tm-bg-primary-dark tm-block tm-block-product-categories">
                 <h2 class="tm-block-title">Filtros</h2>
                 <div class="tm-product-table-container">
+
+                    <!-- Filtro por fecha -->
                     <form asp-action="PorFecha" method="get" class="mb-4">
                         <div class="form-group mb-3">
                             <label class="control-label">Fecha Inicio</label>
@@ -74,19 +141,34 @@
                             <input type="date" name="fechaFin" class="form-control validate" />
                         </div>
                         <button type="submit" class="btn btn-primary btn-block text-uppercase">
-                            Filtrar por Fecha
+                            <i class="fas fa-filter mr-2"></i>Filtrar por Fecha
                         </button>
                     </form>
 
-                    <form asp-action="Buscar" method="get" class="mb-3">
+                    <!-- Buscar por contacto -->
+                    <form asp-action="Buscar" method="get" class="mb-4">
                         <div class="form-group mb-3">
                             <label class="control-label">Buscar Contacto</label>
                             <input type="text" name="termino" class="form-control validate" placeholder="Nombre del contacto..." />
                         </div>
                         <button type="submit" class="btn btn-primary btn-block text-uppercase">
-                            Buscar
+                            <i class="fas fa-search mr-2"></i>Buscar
                         </button>
                     </form>
+
+                    <!-- Estadísticas rápidas -->
+                    @if (Model != null && Model.Any())
+                    {
+                        <div class="border-top pt-3 mt-3">
+                            <h5 class="tm-block-title">Estadísticas</h5>
+                            <div class="small">
+                                <p><i class="fas fa-chart-bar mr-2"></i>Total: @Model.Count() cotizaciones</p>
+                                <p><i class="fas fa-dollar-sign mr-2"></i>Suma total: @Model.Sum(c => c.Total).ToString("C")</p>
+                                <p><i class="fas fa-cube mr-2"></i>Productos únicos: @Model.Select(c => c.ProductoId).Distinct().Count()</p>
+                                <p><i class="fas fa-calendar mr-2"></i>Rango: @Model.Min(c => c.Fecha).ToString("dd MMM") - @Model.Max(c => c.Fecha).ToString("dd MMM")</p>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
@@ -96,16 +178,29 @@
 @section Scripts {
     <script>
         $(function() {
+            // Hacer filas clickeables
             $(".tm-product-name").on("click", function() {
                 window.location.href = $(this).closest('tr').find('.tm-product-edit-link').attr('href');
             });
 
-            // Establecer fechas por defecto para el filtro
+            // Establecer fechas por defecto para el filtro (este mes)
             var today = new Date();
             var firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
 
             $('input[name="fechaInicio"]').val(firstDay.toISOString().split('T')[0]);
             $('input[name="fechaFin"]').val(today.toISOString().split('T')[0]);
+
+            // Auto-dismiss alerts después de 5 segundos
+            setTimeout(function() {
+                $('.alert').alert('close');
+            }, 5000);
+
+            // Confirmación para eliminar
+            $('.tm-product-delete-link').on('click', function(e) {
+                if (!confirm('¿Está seguro de que desea eliminar esta cotización?')) {
+                    e.preventDefault();
+                }
+            });
         });
     </script>
 }
