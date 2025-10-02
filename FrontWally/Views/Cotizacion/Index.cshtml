@@ -69,14 +69,14 @@
                                         <td class="font-weight-bold">@cotizacion.Total.ToString("C")</td>
                                         <td>@cotizacion.Fecha.ToString("dd MMM yyyy")</td>
                                         <td>@cotizacion.UsuarioNombre</td>
-                                        <td>
+                                        @* <td>
                                             <a asp-action="Editar" asp-route-id="@cotizacion.Id" class="tm-product-edit-link mr-2" title="Editar">
                                                 <i class="fas fa-edit tm-product-edit-icon"></i>
                                             </a>
                                             <a asp-action="Eliminar" asp-route-id="@cotizacion.Id" class="tm-product-delete-link" title="Eliminar">
                                                 <i class="far fa-trash-alt tm-product-delete-icon"></i>
                                             </a>
-                                        </td>
+                                        </td> *@
                                     </tr>
                                 }
                             }
@@ -111,11 +111,6 @@
                 </div>
 
                 <div class="row mt-3">
-                    <div class="col-md-6">
-                        <a asp-action="MisCotizaciones" class="btn btn-outline-primary btn-block text-uppercase">
-                            <i class="fas fa-user mr-2"></i>Mis Cotizaciones
-                        </a>
-                    </div>
                     <div class="col-md-6">
                         <a asp-action="Index" class="btn btn-outline-secondary btn-block text-uppercase">
                             <i class="fas fa-sync-alt mr-2"></i>Ver Todas
