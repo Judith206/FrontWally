@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35825.156 d17.13
+VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrontWally", "FrontWally\FrontWally.csproj", "{571366D4-6960-423A-BC03-5C90862E92AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrontWally.WebApp.TestUI", "FrontWally.WebApp.TestUI\FrontWally.WebApp.TestUI.csproj", "{0DAADED9-EEA2-4915-8044-40460727FA38}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{571366D4-6960-423A-BC03-5C90862E92AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{571366D4-6960-423A-BC03-5C90862E92AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{571366D4-6960-423A-BC03-5C90862E92AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DAADED9-EEA2-4915-8044-40460727FA38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DAADED9-EEA2-4915-8044-40460727FA38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DAADED9-EEA2-4915-8044-40460727FA38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DAADED9-EEA2-4915-8044-40460727FA38}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
