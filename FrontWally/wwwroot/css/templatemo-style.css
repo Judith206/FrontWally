@@ -13,7 +13,7 @@ html {
 
 body {
     font-family: Roboto, Helvetica, Arial, sans-serif;
-    background-color: #4e657a;
+    background-color: white !important;
     overflow-x: hidden;
 }
 
