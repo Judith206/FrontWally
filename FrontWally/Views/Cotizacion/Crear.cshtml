@@ -4,32 +4,203 @@
     ViewData["Title"] = "Crear Cotización";
 }
 
-<div class="container tm-mt-big tm-mb-big">
-    <div class="row">
-        <div class="col-xl-9 col-lg-10 col-md-12 col-sm-12 mx-auto">
-            <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
-                <div class="row">
-                    <div class="col-12">
-                        <h2 class="tm-block-title d-inline-block">Nueva Cotización</h2>
+<style>
+    .crear-cotizacion-page {
+        background-color: #f0f2f5;
+        min-height: calc(100vh - 100px);
+        padding: 40px 0;
+    }
+
+    .cotizacion-form-card {
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        border: 1px solid #dddfe2;
+        overflow: hidden;
+    }
+
+    .form-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 25px;
+        border-radius: 12px 12px 0 0;
+    }
+
+    .form-title {
+        font-weight: 700;
+        margin: 0;
+        font-size: 1.8rem;
+    }
+
+    .form-content {
+        padding: 30px;
+    }
+
+    .form-group-custom {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #1c1e21;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .form-control-custom {
+        border: 2px solid #e4e6eb;
+        border-radius: 8px;
+        padding: 12px 15px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background-color: white;
+        color: #1c1e21;
+    }
+
+        .form-control-custom:focus {
+            border-color: #1877f2;
+            box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+            background-color: white;
+        }
+
+    .form-control-readonly {
+        background-color: #f8f9fa !important;
+        border-color: #e4e6eb !important;
+        color: #65676b !important;
+        cursor: not-allowed;
+    }
+
+        .form-control-readonly:focus {
+            background-color: #f8f9fa !important;
+            border-color: #e4e6eb !important;
+            box-shadow: none;
+        }
+
+    .select-custom {
+        border: 2px solid #e4e6eb;
+        border-radius: 8px;
+        padding: 12px 15px;
+        font-size: 1rem;
+        background-color: white;
+        color: #1c1e21;
+        transition: all 0.3s ease;
+    }
+
+        .select-custom:focus {
+            border-color: #1877f2;
+            box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+        }
+
+    .btn-primary-custom {
+        background: linear-gradient(135deg, #1877f2 0%, #0d66d0 100%);
+        border: none;
+        border-radius: 8px;
+        padding: 12px 30px;
+        font-weight: 600;
+        font-size: 1rem;
+        color: white;
+        transition: all 0.3s ease;
+    }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(24, 119, 242, 0.3);
+        }
+
+    .btn-secondary-custom {
+        background-color: #e4e6eb;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 30px;
+        font-weight: 600;
+        font-size: 1rem;
+        color: #1c1e21;
+        transition: all 0.3s ease;
+    }
+
+        .btn-secondary-custom:hover {
+            background-color: #d8dadf;
+            transform: translateY(-2px);
+        }
+
+    .calculation-section {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 20px 0;
+        border: 1px solid #e4e6eb;
+    }
+
+    .calculation-title {
+        font-weight: 600;
+        color: #1c1e21;
+        margin-bottom: 15px;
+        font-size: 1.1rem;
+    }
+
+    .calculation-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid #e4e6eb;
+    }
+
+        .calculation-item:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #1877f2;
+        }
+
+    .calculation-label {
+        color: #65676b;
+    }
+
+    .calculation-value {
+        font-weight: 600;
+        color: #1c1e21;
+    }
+
+    .text-danger {
+        color: #fa383e !important;
+        font-size: 0.875rem;
+        margin-top: 5px;
+        display: block;
+    }
+
+    .alert-marketplace {
+        border-radius: 8px;
+        border: none;
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="crear-cotizacion-page">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="cotizacion-form-card">
+                    <div class="form-header">
+                        <h1 class="form-title">Nueva Cotización</h1>
                     </div>
-                </div>
-                <div class="row tm-edit-product-row">
-                    <div class="col-xl-12 col-lg-12 col-md-12">
-                        <form asp-action="Crear" method="post" class="tm-edit-product-form">
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-content">
+                        <form asp-action="Crear" method="post">
+                            <div asp-validation-summary="ModelOnly" class="alert alert-danger alert-marketplace"></div>
 
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label asp-for="Contacto" class="control-label">Contacto</label>
-                                        <input asp-for="Contacto" class="form-control validate" required />
+                                    <div class="form-group-custom">
+                                        <label asp-for="Contacto" class="form-label">Contacto</label>
+                                        <input asp-for="Contacto" class="form-control-custom" placeholder="Nombre del contacto" required />
                                         <span asp-validation-for="Contacto" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label asp-for="Fecha" class="control-label">Fecha</label>
-                                        <input asp-for="Fecha" type="date" class="form-control validate" required />
+                                    <div class="form-group-custom">
+                                        <label asp-for="Fecha" class="form-label">Fecha</label>
+                                        <input asp-for="Fecha" type="date" class="form-control-custom" required />
                                         <span asp-validation-for="Fecha" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -37,15 +208,15 @@
 
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label asp-for="ProductoId" class="control-label">Producto</label>
-                                        <select asp-for="ProductoId" class="custom-select tm-select-accounts" required id="productoSelect">
+                                    <div class="form-group-custom">
+                                        <label asp-for="ProductoId" class="form-label">Producto</label>
+                                        <select asp-for="ProductoId" class="select-custom" required id="productoSelect">
                                             <option value="">Seleccionar Producto</option>
                                             @if (ViewBag.Productos != null)
                                             {
                                                 foreach (var producto in ViewBag.Productos)
                                                 {
-                                                    <option value="@producto.Id" data-precio="@producto.Precio">@producto.Nombre </option>
+                                                    <option value="@producto.Id" data-precio="@producto.Precio">@producto.Nombre - @producto.Precio.ToString("C")</option>
                                                 }
                                             }
                                         </select>
@@ -53,33 +224,45 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label asp-for="Cantidad" class="control-label">Cantidad</label>
-                                        <input asp-for="Cantidad" type="number" class="form-control validate" min="1" value="1" id="cantidadInput" />
+                                    <div class="form-group-custom">
+                                        <label asp-for="Cantidad" class="form-label">Cantidad</label>
+                                        <input asp-for="Cantidad" type="number" class="form-control-custom" min="1" value="1" id="cantidadInput" placeholder="Cantidad" />
                                         <span asp-validation-for="Cantidad" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label class="control-label">Precio Unitario</label>
-                                        <input type="text" class="form-control validate tm-readonly-field" id="precioUnitario" readonly value="$0.00" />
-                                    </div>
+                            <!-- Sección de cálculos -->
+                            <div class="calculation-section">
+                                <h4 class="calculation-title">Resumen de la Cotización</h4>
+                                <div class="calculation-item">
+                                    <span class="calculation-label">Precio Unitario</span>
+                                    <span class="calculation-value" id="precioUnitarioDisplay">$0.00</span>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label class="control-label">Total</label>
-                                        <input asp-for="Total" type="text" class="form-control validate tm-readonly-field" id="totalInput" readonly value="0.00" />
-                                        <span asp-validation-for="Total" class="text-danger"></span>
-                                    </div>
+                                <div class="calculation-item">
+                                    <span class="calculation-label">Cantidad</span>
+                                    <span class="calculation-value" id="cantidadDisplay">1</span>
+                                </div>
+                                <div class="calculation-item">
+                                    <span class="calculation-label">Total</span>
+                                    <span class="calculation-value" id="totalDisplay">$0.00</span>
                                 </div>
                             </div>
 
-                            <div class="col-12">
-                                <button type="submit" class="btn btn-primary btn-block text-uppercase mt-2">Crear Cotización</button>
-                                <a asp-action="Index" class="btn btn-secondary btn-block text-uppercase mt-2">Cancelar</a>
+                            <!-- Campo oculto para el total -->
+                            <input asp-for="Total" type="hidden" id="totalInput" />
+
+                            <div class="row mt-4">
+                                <div class="col-md-6">
+                                    <button type="submit" class="btn btn-primary-custom w-100">
+                                        <i class="fas fa-check me-2"></i>Crear Cotización
+                                    </button>
+                                </div>
+                                <div class="col-md-6">
+                                    <a asp-action="Index" class="btn btn-secondary-custom w-100">
+                                        <i class="fas fa-times me-2"></i>Cancelar
+                                    </a>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -94,55 +277,6 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 
-    <style>
-        /* Estilos para campos de solo lectura en tema oscuro */
-        .tm-readonly-field {
-            background-color: #54657d !important;
-            border-color: #54657d !important;
-            color: #ffffff !important;
-            cursor: not-allowed;
-        }
-
-        .tm-readonly-field:focus {
-            background-color: #54657d !important;
-            border-color: #54657d !important;
-            color: #ffffff !important;
-            box-shadow: none;
-        }
-
-        /* Asegurar que los campos select también tengan el tema oscuro */
-        .custom-select {
-            background-color: #54657d !important;
-            border-color: #54657d !important;
-            color: #ffffff !important;
-        }
-
-        .custom-select:focus {
-            background-color: #54657d !important;
-            border-color: #54657d !important;
-            color: #ffffff !important;
-        }
-
-        /* Para inputs normales en el tema */
-        .form-control.validate {
-            background-color: #54657d !important;
-            border-color: #54657d !important;
-            color: #ffffff !important;
-        }
-
-        .form-control.validate:focus {
-            background-color: #54657d !important;
-            border-color: #54657d !important;
-            color: #ffffff !important;
-        }
-
-        /* Placeholder en color más claro */
-        .form-control::placeholder {
-            color: #cccccc !important;
-            opacity: 1;
-        }
-    </style>
-
     <script>
         $(function() {
             // Establecer fecha actual por defecto
@@ -153,25 +287,38 @@
             function calcularTotal() {
                 var productoSelect = $('#productoSelect');
                 var cantidadInput = $('#cantidadInput');
-                var precioUnitario = $('#precioUnitario');
+                var precioUnitarioDisplay = $('#precioUnitarioDisplay');
+                var cantidadDisplay = $('#cantidadDisplay');
+                var totalDisplay = $('#totalDisplay');
                 var totalInput = $('#totalInput');
 
                 var productoSeleccionado = productoSelect.find('option:selected');
                 var precio = parseFloat(productoSeleccionado.data('precio')) || 0;
                 var cantidad = parseInt(cantidadInput.val()) || 0;
 
-                precioUnitario.val('$' + precio.toFixed(2));
+                // Actualizar displays
+                precioUnitarioDisplay.text('$' + precio.toFixed(2));
+                cantidadDisplay.text(cantidad);
+
                 var total = precio * cantidad;
+                totalDisplay.text('$' + total.toFixed(2));
                 totalInput.val(total.toFixed(2));
             }
 
-            $('#productoSelect, #cantidadInput').change(calcularTotal);
+            $('#productoSelect, #cantidadInput').on('change input', calcularTotal);
 
             // Calcular inicialmente
             calcularTotal();
 
-            // Aplicar estilos a todos los campos readonly
-            $('input[readonly]').addClass('tm-readonly-field');
+            // Validación adicional antes del envío
+            $('form').on('submit', function(e) {
+                var total = parseFloat($('#totalInput').val()) || 0;
+                if (total <= 0) {
+                    e.preventDefault();
+                    alert('Por favor selecciona un producto y una cantidad válida.');
+                    return false;
+                }
+            });
         });
     </script>
 }

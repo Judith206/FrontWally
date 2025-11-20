@@ -55,10 +55,15 @@ namespace FrontWally.Services
             return await _apiService.DeleteAsync("cotizaciones", id, token);
         }
 
-        // Método adicional: Obtener cotizaciones por rango de fechas
+        // En tu CotizacionService del frontend, asegúrate de que los métodos estén así:
         public async Task<List<CotizacionDTO>> GetCotizacionesByFechaRangeAsync(DateTime fechaInicio, DateTime fechaFin, string token = null)
         {
             return await _apiService.GetAllAsync<CotizacionDTO>($"cotizaciones/fechas?fechaInicio={fechaInicio:yyyy-MM-dd}&fechaFin={fechaFin:yyyy-MM-dd}", token);
+        }
+
+        public async Task<List<CotizacionDTO>> BuscarCotizacionesPorContactoAsync(string contacto, string token = null)
+        {
+            return await _apiService.GetAllAsync<CotizacionDTO>($"cotizaciones/buscar?contacto={Uri.EscapeDataString(contacto)}", token);
         }
     }
 }

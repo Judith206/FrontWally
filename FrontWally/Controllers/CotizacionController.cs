@@ -34,6 +34,85 @@ namespace FrontWally.Controllers
             }
         }
 
+        // GET: Filtrar por fecha
+        [HttpGet]
+        public async Task<IActionResult> PorFecha(DateTime fechaInicio, DateTime fechaFin)
+        {
+            try
+            {
+                var authToken = await GetTokenAsync();
+
+                // Validar fechas
+                if (fechaInicio == DateTime.MinValue || fechaFin == DateTime.MinValue)
+                {
+                    TempData["Error"] = "Por favor selecciona ambas fechas";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                if (fechaInicio > fechaFin)
+                {
+                    TempData["Error"] = "La fecha de inicio no puede ser mayor a la fecha fin";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                var cotizaciones = await _cotizacionService.GetCotizacionesByFechaRangeAsync(fechaInicio, fechaFin, authToken);
+
+                if (!cotizaciones.Any())
+                {
+                    TempData["Info"] = $"No se encontraron cotizaciones entre {fechaInicio:dd/MM/yyyy} y {fechaFin:dd/MM/yyyy}";
+                }
+                else
+                {
+                    TempData["Success"] = $"Se encontraron {cotizaciones.Count} cotizaciones entre {fechaInicio:dd/MM/yyyy} y {fechaFin:dd/MM/yyyy}";
+                }
+
+                return View("Index", cotizaciones);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Error al filtrar por fecha: " + ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        // GET: Buscar por contacto
+        [HttpGet]
+        public async Task<IActionResult> Buscar(string termino)
+        {
+            try
+            {
+                var authToken = await GetTokenAsync();
+
+                if (string.IsNullOrWhiteSpace(termino))
+                {
+                    TempData["Error"] = "Por favor ingresa un término de búsqueda";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                // Obtener todas las cotizaciones y filtrar localmente
+                var todasCotizaciones = await _cotizacionService.GetAllCotizacionesAsync(authToken);
+                var cotizacionesFiltradas = todasCotizaciones
+                    .Where(c => c.Contacto.Contains(termino, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+
+                if (!cotizacionesFiltradas.Any())
+                {
+                    TempData["Info"] = $"No se encontraron cotizaciones para el contacto: '{termino}'";
+                }
+                else
+                {
+                    TempData["Success"] = $"Se encontraron {cotizacionesFiltradas.Count} cotizaciones para: '{termino}'";
+                }
+
+                return View("Index", cotizacionesFiltradas);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Error al buscar cotizaciones: " + ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
         // GET: Mostrar formulario de creación
         [HttpGet]
         public async Task<IActionResult> Crear()
@@ -53,7 +132,7 @@ namespace FrontWally.Controllers
             }
         }
 
-        // POST: Crear nueva cotización - CORREGIDO
+        // POST: Crear nueva cotización
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Crear(CotizacionCreateDTO createDto)
@@ -137,9 +216,7 @@ namespace FrontWally.Controllers
             }
         }
 
-        // ... (otros métodos mantienen la misma estructura con await GetTokenAsync())
-
-        // ✅ MÉTODO GetTokenAsync CORREGIDO
+        // GetTokenAsync
         private async Task<string> GetTokenAsync()
         {
             try

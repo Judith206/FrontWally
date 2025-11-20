@@ -4,167 +4,372 @@
     ViewData["Title"] = "Cotizaciones";
 }
 
-<div class="container mt-5">
-    <div class="row tm-content-row">
-        <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8 tm-block-col">
-            <div class="tm-bg-primary-dark tm-block tm-block-products">
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-marketplace alert-dismissible fade show" role="alert">
+        @TempData["Error"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
 
-                <!-- Mensajes de éxito/error -->
-                @if (TempData["Success"] != null)
-                {
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        @TempData["Success"]
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                }
+@if (TempData["Info"] != null)
+{
+    <div class="alert alert-info alert-marketplace alert-dismissible fade show" role="alert">
+        @TempData["Info"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
 
-                @if (TempData["Error"] != null)
-                {
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        @TempData["Error"]
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                }
+<style>
+    .cotizaciones-page {
+        background-color: #f0f2f5;
+        min-height: calc(100vh - 100px);
+        padding: 20px 0;
+    }
 
-                @if (ViewBag.Error != null)
-                {
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        @ViewBag.Error
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                }
+    .cotizacion-card {
+        background-color: #f0f2f5;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        height: 100%;
+        border: none;
+        box-shadow: none;
+    }
 
-                <div class="tm-product-table-container">
-                    <table class="table table-hover tm-table-small tm-product-table">
-                        <thead>
-                            <tr>
-                                <th scope="col">&nbsp;</th>
-                                <th scope="col">CONTACTO</th>
-                                <th scope="col">PRODUCTO</th>
-                                <th scope="col">CANTIDAD</th>
-                                <th scope="col">PRECIO UNIT.</th>
-                                <th scope="col">TOTAL</th>
-                                <th scope="col">FECHA</th>
-                                <th scope="col">USUARIO</th>
-                                <th scope="col">&nbsp;</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (Model != null && Model.Any())
-                            {
-                                @foreach (var cotizacion in Model)
-                                {
-                                    <tr>
-                                        <th scope="row"><input type="checkbox" /></th>
-                                        <td class="tm-product-name">@cotizacion.Contacto</td>
-                                        <td>@cotizacion.ProductoNombre</td>
-                                        <td class="text-center">@cotizacion.Cantidad</td>
-                                        <td>@cotizacion.ProductoPrecio.ToString("C")</td>
-                                        <td class="font-weight-bold">@cotizacion.Total.ToString("C")</td>
-                                        <td>@cotizacion.Fecha.ToString("dd MMM yyyy")</td>
-                                        <td>@cotizacion.UsuarioNombre</td>
-                                        @* <td>
-                                            <a asp-action="Editar" asp-route-id="@cotizacion.Id" class="tm-product-edit-link mr-2" title="Editar">
-                                                <i class="fas fa-edit tm-product-edit-icon"></i>
-                                            </a>
-                                            <a asp-action="Eliminar" asp-route-id="@cotizacion.Id" class="tm-product-delete-link" title="Eliminar">
-                                                <i class="far fa-trash-alt tm-product-delete-icon"></i>
-                                            </a>
-                                        </td> *@
-                                    </tr>
-                                }
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td colspan="9" class="text-center">
-                                        <div class="alert alert-info mt-3">
-                                            No se encontraron cotizaciones.
-                                            <a asp-action="Crear" class="alert-link">Crear la primera cotización</a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-                <!-- table container -->
+    .cotizacion-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px;
+        border-radius: 8px 8px 0 0;
+    }
 
-                <div class="d-flex justify-content-between align-items-center mt-3">
-                    <a asp-controller="Cotizacion" asp-action="Crear" class="btn btn-primary text-uppercase">
-                        <i class="fas fa-plus mr-2"></i>Nueva Cotización
-                    </a>
+    .cotizacion-content {
+        padding: 20px;
+        background-color: white;
+        border-radius: 0 0 8px 8px;
+        border: 1px solid #dddfe2;
+    }
 
-                    @if (Model != null && Model.Any())
-                    {
-                        <div class="text-light">
-                            <strong>Total de cotizaciones: @Model.Count()</strong> |
-                            <strong>Suma total: @Model.Sum(c => c.Total).ToString("C")</strong>
-                        </div>
-                    }
-                </div>
+    .cotizacion-price {
+        font-weight: bold;
+        font-size: 1.5rem;
+        color: white;
+        margin-bottom: 5px;
+    }
 
-                <div class="row mt-3">
-                    <div class="col-md-6">
-                        <a asp-action="Index" class="btn btn-outline-secondary btn-block text-uppercase">
-                            <i class="fas fa-sync-alt mr-2"></i>Ver Todas
-                        </a>
-                    </div>
-                </div>
+    .cotizacion-contact {
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: #1c1e21;
+        margin-bottom: 5px;
+    }
+
+    .cotizacion-product {
+        color: #65676b;
+        font-size: 0.9rem;
+        margin-bottom: 10px;
+    }
+
+    .cotizacion-details {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin: 15px 0;
+    }
+
+    .detail-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .detail-label {
+        font-size: 0.8rem;
+        color: #65676b;
+        margin-bottom: 2px;
+    }
+
+    .detail-value {
+        font-weight: 600;
+        color: #1c1e21;
+    }
+
+    .cotizacion-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #dddfe2;
+    }
+
+    .btn-cotizacion {
+        border-radius: 6px;
+        font-weight: 600;
+        padding: 6px 12px;
+        font-size: 0.85rem;
+        text-decoration: none;
+    }
+
+    .btn-edit {
+        background-color: #e7f3ff;
+        color: #1877f2;
+        border: 1px solid #1877f2;
+    }
+
+    .btn-delete {
+        background-color: #ffe7e7;
+        color: #fa383e;
+        border: 1px solid #fa383e;
+    }
+
+    .btn-new-cotizacion {
+        background-color: #42b72a;
+        color: white;
+        font-weight: 600;
+        border-radius: 6px;
+        padding: 10px 20px;
+        margin: 20px 0;
+        border: none;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+    }
+
+    .filters-sidebar {
+        background-color: #f0f2f5;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        border: none;
+        box-shadow: none;
+    }
+
+    .filter-title {
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: #1c1e21;
+        font-size: 1.2rem;
+    }
+
+    .filter-section {
+        margin-bottom: 20px;
+    }
+
+        .filter-section h6 {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #1c1e21;
+            font-size: 1rem;
+        }
+
+    .stats-card {
+        background-color: white;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+        border: 1px solid #dddfe2;
+    }
+
+    .stat-value {
+        font-weight: bold;
+        font-size: 1.2rem;
+        color: #1877f2;
+    }
+
+    .stat-label {
+        font-size: 0.8rem;
+        color: #65676b;
+    }
+
+    .page-title {
+        color: #1877f2;
+        font-weight: 700;
+        margin-bottom: 20px;
+        font-size: 1.8rem;
+    }
+
+    .alert-marketplace {
+        border-radius: 8px;
+        border: none;
+        margin-bottom: 20px;
+    }
+
+    .form-control {
+        border-radius: 6px;
+        border: 1px solid #dddfe2;
+    }
+</style>
+
+<div class="cotizaciones-page">
+    <div class="container-fluid">
+
+        <!-- Mensajes de éxito/error -->
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success alert-marketplace alert-dismissible fade show" role="alert">
+                @TempData["Success"]
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-        </div>
+        }
 
-        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 tm-block-col">
-            <div class="tm-bg-primary-dark tm-block tm-block-product-categories">
-                <h2 class="tm-block-title">Filtros</h2>
-                <div class="tm-product-table-container">
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger alert-marketplace alert-dismissible fade show" role="alert">
+                @TempData["Error"]
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger alert-marketplace alert-dismissible fade show" role="alert">
+                @ViewBag.Error
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+
+        <div class="row">
+            <!-- Sidebar de Filtros -->
+            <div class="col-lg-3 col-md-4">
+                <div class="filters-sidebar">
+                    
 
                     <!-- Filtro por fecha -->
-                    <form asp-action="PorFecha" method="get" class="mb-4">
-                        <div class="form-group mb-3">
-                            <label class="control-label">Fecha Inicio</label>
-                            <input type="date" name="fechaInicio" class="form-control validate" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label class="control-label">Fecha Fin</label>
-                            <input type="date" name="fechaFin" class="form-control validate" />
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-block text-uppercase">
-                            <i class="fas fa-filter mr-2"></i>Filtrar por Fecha
-                        </button>
-                    </form>
+                    <div class="filter-section">
+                        <h6>Filtrar por Fecha</h6>
+                        <form asp-action="PorFecha" method="get">
+                            <div class="form-group mb-3">
+                                <label class="control-label">Fecha Inicio</label>
+                                <input type="date" name="fechaInicio" class="form-control" />
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="control-label">Fecha Fin</label>
+                                <input type="date" name="fechaFin" class="form-control" />
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">
+                                <i class="fas fa-filter me-2"></i>Filtrar
+                            </button>
+                        </form>
+                    </div>
 
                     <!-- Buscar por contacto -->
-                    <form asp-action="Buscar" method="get" class="mb-4">
-                        <div class="form-group mb-3">
-                            <label class="control-label">Buscar Contacto</label>
-                            <input type="text" name="termino" class="form-control validate" placeholder="Nombre del contacto..." />
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-block text-uppercase">
-                            <i class="fas fa-search mr-2"></i>Buscar
-                        </button>
-                    </form>
+                    <div class="filter-section">
+                        <h6>Buscar Contacto</h6>
+                        <form asp-action="Buscar" method="get">
+                            <div class="form-group mb-3">
+                                <input type="text" name="termino" class="form-control" placeholder="Nombre del contacto..." />
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">
+                                <i class="fas fa-search me-2"></i>Buscar
+                            </button>
+                        </form>
+                    </div>
+                    <a asp-controller="Cotizacion" asp-action="Crear" class="btn btn-new-cotizacion w-100">
+                        <i class="fas fa-plus-circle me-2"></i>Nueva Cotización
+                    </a>
 
                     <!-- Estadísticas rápidas -->
                     @if (Model != null && Model.Any())
                     {
-                        <div class="border-top pt-3 mt-3">
-                            <h5 class="tm-block-title">Estadísticas</h5>
-                            <div class="small">
-                                <p><i class="fas fa-chart-bar mr-2"></i>Total: @Model.Count() cotizaciones</p>
-                                <p><i class="fas fa-dollar-sign mr-2"></i>Suma total: @Model.Sum(c => c.Total).ToString("C")</p>
-                                <p><i class="fas fa-cube mr-2"></i>Productos únicos: @Model.Select(c => c.ProductoId).Distinct().Count()</p>
-                                <p><i class="fas fa-calendar mr-2"></i>Rango: @Model.Min(c => c.Fecha).ToString("dd MMM") - @Model.Max(c => c.Fecha).ToString("dd MMM")</p>
+                        <div class="filter-section">
+                            <h6>Estadísticas</h6>
+                            <div class="stats-card">
+                                <div class="stat-value">@Model.Count()</div>
+                                <div class="stat-label">Total Cotizaciones</div>
+                            </div>
+                            @* <div class="stats-card">
+                                <div class="stat-value">@Model.Sum(c => c.Total).ToString("C")</div>
+                                <div class="stat-label">Suma Total</div>
+                            </div> *@
+                            <div class="stats-card">
+                                <div class="stat-value">@Model.Select(c => c.ProductoId).Distinct().Count()</div>
+                                <div class="stat-label">Productos Únicos</div>
                             </div>
                         </div>
                     }
                 </div>
+
+                @* <a asp-controller="Cotizacion" asp-action="Crear" class="btn btn-new-cotizacion w-100">
+                    <i class="fas fa-plus-circle me-2"></i>Nueva Cotización
+                </a> *@
+            </div>
+
+            <!-- Lista de Cotizaciones -->
+            <div class="col-lg-9 col-md-8">
+                @if (Model != null && Model.Any())
+                {
+                    <div class="row">
+                        @foreach (var cotizacion in Model)
+                        {
+                            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-4">
+                                <div class="cotizacion-card">
+                                    <div class="cotizacion-header">
+                                        <div class="cotizacion-price">@cotizacion.Total.ToString("C")</div>
+                                        <div class="cotizacion-contact">@cotizacion.Contacto</div>
+                                    </div>
+
+                                    <div class="cotizacion-content">
+                                        <div class="cotizacion-product">
+                                            <strong>Producto:</strong> @cotizacion.ProductoNombre
+                                        </div>
+
+                                        <div class="cotizacion-details">
+                                            <div class="detail-item">
+                                                <span class="detail-label">Cantidad</span>
+                                                <span class="detail-value">@cotizacion.Cantidad</span>
+                                            </div>
+                                            <div class="detail-item">
+                                                <span class="detail-label">Precio Unit.</span>
+                                                <span class="detail-value">@cotizacion.ProductoPrecio.ToString("C")</span>
+                                            </div>
+                                            <div class="detail-item">
+                                                <span class="detail-label">Fecha</span>
+                                                <span class="detail-value">@cotizacion.Fecha.ToString("dd MMM yyyy")</span>
+                                            </div>
+                                            <div class="detail-item">
+                                                <span class="detail-label">Usuario</span>
+                                                <span class="detail-value">@cotizacion.UsuarioNombre</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="cotizacion-actions">
+                                            @* <a asp-action="Editar" asp-route-id="@cotizacion.Id"
+                                               class="btn btn-edit btn-cotizacion" title="Editar">
+                                                <i class="fas fa-edit me-1"></i> Editar
+                                            </a>
+                                            <a asp-action="Eliminar" asp-route-id="@cotizacion.Id"
+                                               class="btn btn-delete btn-cotizacion" title="Eliminar">
+                                                <i class="fas fa-trash-alt me-1"></i> Eliminar
+                                            </a> *@
+                                            <span class="text-muted">Acciones deshabilitadas</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center">
+                        <div class="alert alert-info alert-marketplace">
+                            <h4>No se encontraron cotizaciones</h4>
+                            <p class="mb-0">Comienza creando tu primera cotización</p>
+                            <a asp-action="Crear" class="btn btn-new-cotizacion mt-3">
+                                <i class="fas fa-plus-circle me-2"></i>Crear Primera Cotización
+                            </a>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     </div>
@@ -173,11 +378,6 @@
 @section Scripts {
     <script>
         $(function() {
-            // Hacer filas clickeables
-            $(".tm-product-name").on("click", function() {
-                window.location.href = $(this).closest('tr').find('.tm-product-edit-link').attr('href');
-            });
-
             // Establecer fechas por defecto para el filtro (este mes)
             var today = new Date();
             var firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -191,7 +391,7 @@
             }, 5000);
 
             // Confirmación para eliminar
-            $('.tm-product-delete-link').on('click', function(e) {
+            $('.btn-delete').on('click', function(e) {
                 if (!confirm('¿Está seguro de que desea eliminar esta cotización?')) {
                     e.preventDefault();
                 }

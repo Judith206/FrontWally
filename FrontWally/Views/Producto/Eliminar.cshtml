@@ -4,90 +4,247 @@
     ViewData["Title"] = "Eliminar Producto";
 }
 
-<div class="container tm-mt-big tm-mb-big">
-    <div class="row">
-        <div class="col-xl-6 col-lg-8 col-md-10 col-sm-12 mx-auto">
-            <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
-                <div class="row">
-                    <div class="col-12">
-                        <h2 class="tm-block-title d-inline-block text-danger">Eliminar Producto</h2>
+<style>
+    .eliminar-producto-page {
+        background-color: #f0f2f5;
+        min-height: calc(100vh - 100px);
+        padding: 40px 0;
+    }
+
+    .eliminar-card {
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        border: 1px solid #dddfe2;
+        overflow: hidden;
+    }
+
+    .eliminar-header {
+        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        color: white;
+        padding: 25px;
+        border-radius: 12px 12px 0 0;
+        text-align: center;
+    }
+
+    .eliminar-title {
+        font-weight: 700;
+        margin: 0;
+        font-size: 1.8rem;
+    }
+
+    .eliminar-subtitle {
+        margin: 10px 0 0 0;
+        opacity: 0.9;
+        font-size: 1.1rem;
+    }
+
+    .eliminar-content {
+        padding: 30px;
+    }
+
+    .producto-info-card {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 20px;
+        border: 1px solid #e4e6eb;
+        margin-bottom: 25px;
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: #1c1e21;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .info-value {
+        color: #65676b;
+        margin-bottom: 15px;
+    }
+
+    .status-badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .status-active {
+        background-color: #e7f3ff;
+        color: #1877f2;
+    }
+
+    .status-inactive {
+        background-color: #f0f0f0;
+        color: #65676b;
+    }
+
+    .producto-image {
+        max-width: 100%;
+        max-height: 200px;
+        border-radius: 8px;
+        border: 2px solid #e4e6eb;
+    }
+
+    .no-image-container {
+        text-align: center;
+        padding: 40px 20px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        border: 2px dashed #e4e6eb;
+    }
+
+    .no-image-icon {
+        font-size: 3rem;
+        color: #65676b;
+        margin-bottom: 10px;
+    }
+
+    .btn-danger-custom {
+        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        border: none;
+        border-radius: 8px;
+        padding: 12px 30px;
+        font-weight: 600;
+        font-size: 1rem;
+        color: white;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+        .btn-danger-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        }
+
+    .btn-secondary-custom {
+        background-color: #e4e6eb;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 30px;
+        font-weight: 600;
+        font-size: 1rem;
+        color: #1c1e21;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+        .btn-secondary-custom:hover {
+            background-color: #d8dadf;
+            transform: translateY(-2px);
+        }
+
+    .warning-section {
+        background-color: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 25px;
+    }
+
+    .warning-icon {
+        color: #f39c12;
+        font-size: 1.5rem;
+        margin-right: 10px;
+    }
+
+    .warning-text {
+        color: #856404;
+        font-weight: 600;
+        margin: 0;
+    }
+</style>
+
+<div class="eliminar-producto-page">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="eliminar-card">
+                    <div class="eliminar-header">
+                        <h1 class="eliminar-title">⚠️ Eliminar Producto</h1>
+                        <p class="eliminar-subtitle">Esta acción no se puede deshacer</p>
                     </div>
-                </div>
 
-                <!-- Información del Producto -->
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group mb-3">
-                            <label class="control-label font-weight-bold">Nombre:</label>
-                            <p class="form-control-plaintext text-white">@Model.Nombre</p>
+                    <div class="eliminar-content">
+                        <!-- Advertencia -->
+                        <div class="warning-section">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-exclamation-triangle warning-icon"></i>
+                                <p class="warning-text">Estás a punto de eliminar permanentemente este producto.</p>
+                            </div>
                         </div>
 
-                        <div class="form-group mb-3">
-                            <label class="control-label font-weight-bold">Descripción:</label>
-                            <p class="form-control-plaintext text-white">@Model.Descripcion</p>
-                        </div>
+                        <!-- Información del Producto -->
+                        <div class="producto-info-card">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <span class="info-label">Nombre del Producto</span>
+                                        <div class="info-value">@Model.Nombre</div>
+                                    </div>
 
-                        <div class="form-group mb-3">
-                            <label class="control-label font-weight-bold">Precio:</label>
-                            <p class="form-control-plaintext text-white">@Model.Precio.ToString("C")</p>
-                        </div>
+                                    <div class="mb-3">
+                                        <span class="info-label">Descripción</span>
+                                        <div class="info-value">@Model.Descripcion</div>
+                                    </div>
 
-                        <div class="form-group mb-3">
-                            <label class="control-label font-weight-bold">Estado:</label>
-                            <p class="form-control-plaintext text-white">
-                                @if (Model.Estado)
-                                {
-                                    <span class="badge badge-success">Activo</span>
-                                }
-                                else
-                                {
-                                    <span class="badge badge-secondary">Inactivo</span>
-                                }
-                            </p>
-                        </div>
-                    </div>
+                                    <div class="mb-3">
+                                        <span class="info-label">Precio</span>
+                                        <div class="info-value">@Model.Precio.ToString("C")</div>
+                                    </div>
 
-                    <div class="col-md-6 text-center">
-                        <div class="mb-3">
-                            <label class="control-label font-weight-bold d-block">Imagen:</label>
-                            @if (Model.Imagen != null && Model.Imagen.Length > 0)
-                            {
-                                <img src="data:image/png;base64,@Convert.ToBase64String(Model.Imagen)"
-                                     alt="Imagen Producto"
-                                     class="img-fluid rounded shadow"
-                                     style="max-height: 200px;" />
-                            }
-                            else
-                            {
-                                <div class="tm-product-img-dummy mx-auto">
-                                    <i class="fas fa-image tm-upload-icon"></i>
+                                    <div class="mb-3">
+                                        <span class="info-label">Estado</span>
+                                        <div class="info-value">
+                                            <span class="status-badge @(Model.Estado ? "status-active" : "status-inactive")">
+                                                @(Model.Estado ? "🟢 Activo" : "🔴 Inactivo")
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <p class="text-muted mt-2">Sin imagen</p>
-                            }
+
+                                <div class="col-md-6">
+                                    <div class="text-center">
+                                        <span class="info-label d-block mb-3">Imagen del Producto</span>
+                                        @if (Model.Imagen != null && Model.Imagen.Length > 0)
+                                        {
+                                            <img src="data:image/png;base64,@Convert.ToBase64String(Model.Imagen)"
+                                                 alt="Imagen Producto"
+                                                 class="producto-image" />
+                                        }
+                                        else
+                                        {
+                                            <div class="no-image-container">
+                                                <i class="fas fa-image no-image-icon"></i>
+                                                <div class="text-muted">Sin imagen</div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
+                        <!-- Formulario de Eliminación -->
+                        <form asp-action="EliminarConfirmed" asp-controller="Producto" method="post" id="deleteForm">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@Model.Id" />
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <button type="submit" class="btn-danger-custom" id="deleteButton">
+                                        <i class="fas fa-trash-alt me-2"></i>Eliminar Producto
+                                    </button>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <a asp-action="Index" class="btn-secondary-custom">
+                                        <i class="fas fa-times me-2"></i>Cancelar
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
-
-                <!-- Formulario de Eliminación  -->
-                <form asp-action="EliminarConfirmed" asp-controller="Producto" method="post">
-                    @Html.AntiForgeryToken()
-                    <input type="hidden" name="id" value="@Model.Id" />
-
-                    <div class="row mt-4">
-                        <div class="col-6">
-                            <button type="submit"
-                                    class="btn btn-danger btn-block text-uppercase"
-                                    onclick="return confirm('¿Estás completamente seguro de eliminar este producto?')">
-                                <i class="fas fa-trash-alt mr-2"></i>Eliminar
-                            </button>
-                        </div>
-                        <div class="col-6">
-                            <a asp-action="Index" class="btn btn-secondary btn-block text-uppercase">
-                                <i class="fas fa-times mr-2"></i>Cancelar
-                            </a>
-                        </div>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
@@ -96,10 +253,41 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            // Prevenir envío doble del formulario
-            $('form').submit(function () {
-                $('button[type="submit"]').prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-2"></i>Eliminando...');
+            // Confirmación de eliminación
+            $('#deleteForm').on('submit', function (e) {
+                e.preventDefault();
+
+                Swal.fire({
+                    title: '¿Estás completamente seguro?',
+                    text: "¡Esta acción no se puede deshacer! El producto será eliminado permanentemente.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#e74c3c',
+                    cancelButtonColor: '#95a5a6',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Prevenir envío doble
+                        $('#deleteButton').prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Eliminando...');
+
+                        // Enviar formulario
+                        this.submit();
+                    }
+                });
             });
+
+            // Si no hay SweetAlert, usar confirm nativo
+            if (typeof Swal === 'undefined') {
+                $('#deleteForm').on('submit', function (e) {
+                    if (!confirm('¿Estás completamente seguro de eliminar este producto? Esta acción no se puede deshacer.')) {
+                        e.preventDefault();
+                    } else {
+                        $('#deleteButton').prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Eliminando...');
+                    }
+                });
+            }
         });
     </script>
 }

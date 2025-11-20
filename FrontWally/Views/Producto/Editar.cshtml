@@ -4,115 +4,353 @@
     ViewData["Title"] = "Editar Producto";
 }
 
-<div class="container tm-mt-big tm-mb-big">
-    <div class="row">
-        <div class="col-xl-9 col-lg-10 col-md-12 col-sm-12 mx-auto">
-            <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
-                <div class="row">
-                    <div class="col-12">
-                        <h2 class="tm-block-title d-inline-block">Editar Producto</h2>
+<style>
+    .editar-producto-page {
+        background-color: #f0f2f5;
+        min-height: calc(100vh - 100px);
+        padding: 40px 0;
+    }
+
+    .producto-form-card {
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        border: 1px solid #dddfe2;
+        overflow: hidden;
+    }
+
+    .form-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 25px;
+        border-radius: 12px 12px 0 0;
+    }
+
+    .form-title {
+        font-weight: 700;
+        margin: 0;
+        font-size: 1.8rem;
+    }
+
+    .form-content {
+        padding: 30px;
+    }
+
+    .form-group-custom {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #1c1e21;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .form-control-custom {
+        border: 2px solid #e4e6eb;
+        border-radius: 8px;
+        padding: 12px 15px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background-color: white;
+        color: #1c1e21;
+        width: 100%;
+    }
+
+        .form-control-custom:focus {
+            border-color: #1877f2;
+            box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+            background-color: white;
+        }
+
+    .select-custom {
+        border: 2px solid #e4e6eb;
+        border-radius: 8px;
+        padding: 12px 15px;
+        font-size: 1rem;
+        background-color: white;
+        color: #1c1e21;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+        .select-custom:focus {
+            border-color: #1877f2;
+            box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+        }
+
+    .textarea-custom {
+        border: 2px solid #e4e6eb;
+        border-radius: 8px;
+        padding: 12px 15px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background-color: white;
+        color: #1c1e21;
+        width: 100%;
+        resize: vertical;
+        min-height: 100px;
+    }
+
+        .textarea-custom:focus {
+            border-color: #1877f2;
+            box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+        }
+
+    .btn-primary-custom {
+        background: linear-gradient(135deg, #1877f2 0%, #0d66d0 100%);
+        border: none;
+        border-radius: 8px;
+        padding: 12px 30px;
+        font-weight: 600;
+        font-size: 1rem;
+        color: white;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(24, 119, 242, 0.3);
+        }
+
+    .btn-secondary-custom {
+        background-color: #e4e6eb;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 30px;
+        font-weight: 600;
+        font-size: 1rem;
+        color: #1c1e21;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+        .btn-secondary-custom:hover {
+            background-color: #d8dadf;
+            transform: translateY(-2px);
+        }
+
+    .btn-warning-custom {
+        background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+        border: none;
+        border-radius: 8px;
+        padding: 12px 20px;
+        font-weight: 600;
+        font-size: 1rem;
+        color: white;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+        .btn-warning-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
+        }
+
+    .image-upload-container {
+        text-align: center;
+        padding: 20px;
+        border: 2px dashed #e4e6eb;
+        border-radius: 12px;
+        background-color: #f8f9fa;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        margin-bottom: 20px;
+    }
+
+        .image-upload-container:hover {
+            border-color: #1877f2;
+            background-color: #f0f2f5;
+        }
+
+        .image-upload-container.has-image {
+            border-color: #42b72a;
+            background-color: #f0f9f0;
+        }
+
+    .upload-icon {
+        font-size: 3rem;
+        color: #65676b;
+        margin-bottom: 15px;
+    }
+
+    .image-upload-container.has-image .upload-icon {
+        color: #42b72a;
+    }
+
+    .upload-text {
+        color: #65676b;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .image-preview {
+        max-width: 100%;
+        max-height: 300px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        border: 2px solid #e4e6eb;
+    }
+
+    .text-danger {
+        color: #fa383e !important;
+        font-size: 0.875rem;
+        margin-top: 5px;
+        display: block;
+    }
+
+    .alert-marketplace {
+        border-radius: 8px;
+        border: none;
+        margin-bottom: 20px;
+    }
+
+    .price-input-container {
+        position: relative;
+    }
+
+    .price-symbol {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #65676b;
+        font-weight: 600;
+    }
+
+    .price-input {
+        padding-left: 30px !important;
+    }
+
+    .current-image-label {
+        font-weight: 600;
+        color: #1c1e21;
+        margin-bottom: 10px;
+        display: block;
+    }
+</style>
+
+<div class="editar-producto-page">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-md-12">
+                <div class="producto-form-card">
+                    <div class="form-header">
+                        <h1 class="form-title">Editar Producto</h1>
+                    </div>
+
+                    <div class="form-content">
+                        <form asp-action="Editar" asp-controller="Producto" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data">
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden" asp-for="Id" />
+                            <input type="hidden" asp-for="UsuarioId" />
+
+                            <div asp-validation-summary="ModelOnly" class="alert alert-danger alert-marketplace"></div>
+
+                            @if (ViewBag.Error != null)
+                            {
+                                <div class="alert alert-danger alert-marketplace">
+                                    @ViewBag.Error
+                                </div>
+                            }
+
+                            <div class="row">
+                                <!-- Columna izquierda - Formulario -->
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="form-group-custom">
+                                        <label asp-for="Nombre" class="form-label">Nombre del Producto</label>
+                                        <input asp-for="Nombre" class="form-control-custom" placeholder="Ingresa el nombre del producto" required />
+                                        <span asp-validation-for="Nombre" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group-custom">
+                                        <label asp-for="Descripcion" class="form-label">Descripción</label>
+                                        <textarea asp-for="Descripcion" class="textarea-custom" placeholder="Describe el producto..." rows="4" required></textarea>
+                                        <span asp-validation-for="Descripcion" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group-custom">
+                                                <label asp-for="Precio" class="form-label">Precio</label>
+                                                <div class="price-input-container">
+                                                    <span class="price-symbol">$</span>
+                                                    <input asp-for="Precio" type="number" step="0.01" class="form-control-custom price-input" placeholder="0.00" required />
+                                                </div>
+                                                <span asp-validation-for="Precio" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group-custom">
+                                                <label asp-for="Estado" class="form-label">Estado</label>
+                                                <select asp-for="Estado" class="select-custom">
+                                                    <option value="true">🟢 Activo</option>
+                                                    <option value="false">🔴 Inactivo</option>
+                                                </select>
+                                                <span asp-validation-for="Estado" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Columna derecha - Imagen -->
+                                <div class="col-lg-6 col-md-6">
+                                    <!-- Mostrar imagen actual -->
+                                    @if (Model.Imagen != null && Model.Imagen.Length > 0)
+                                    {
+                                        <div class="form-group-custom">
+                                            <label class="current-image-label">Imagen Actual</label>
+                                            <div class="text-center">
+                                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Imagen)"
+                                                     alt="Imagen actual del producto"
+                                                     class="image-preview"
+                                                     id="currentImage" />
+                                            </div>
+                                        </div>
+                                    }
+
+                                    <div class="image-upload-container" id="imageUploadContainer" onclick="document.getElementById('fileInput').click();">
+                                        <i class="fas fa-sync-alt upload-icon" id="uploadIcon"></i>
+                                        <div class="upload-text" id="uploadText">
+                                            @(Model.Imagen != null && Model.Imagen.Length > 0 ? "Haz clic para cambiar la imagen" : "Haz clic para subir una imagen")
+                                        </div>
+                                        <div id="imagePreview"></div>
+                                        <input id="fileInput" asp-for="ImagenFile" type="file" accept="image/*" style="display:none;" />
+                                        <button type="button" class="btn-warning-custom mt-3">
+                                            <i class="fas fa-sync-alt me-2"></i>
+                                            @(Model.Imagen != null && Model.Imagen.Length > 0 ? "CAMBIAR IMAGEN" : "SUBIR IMAGEN")
+                                        </button>
+                                    </div>
+                                    <span asp-validation-for="ImagenFile" class="text-danger"></span>
+
+                                    <div class="mt-4">
+                                        <small class="text-muted">
+                                            <i class="fas fa-info-circle me-1"></i>
+                                            Formatos aceptados: JPG, PNG, GIF. Tamaño máximo: 5MB
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Botones -->
+                            <div class="row mt-4">
+                                <div class="col-md-6 mb-3">
+                                    <button type="submit" class="btn btn-primary-custom">
+                                        <i class="fas fa-save me-2"></i>Actualizar Producto
+                                    </button>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <a asp-action="Index" class="btn btn-secondary-custom">
+                                        <i class="fas fa-times me-2"></i>Cancelar
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
-
-                <form asp-action="Editar"
-                      asp-controller="Producto"
-                      asp-route-id="@Model.Id"
-                      method="post"
-                      class="tm-edit-product-form"
-                      enctype="multipart/form-data">
-
-                    @Html.AntiForgeryToken()
-
-                    <input type="hidden" asp-for="Id" />
-                    <input type="hidden" asp-for="UsuarioId" />
-
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-                    @if (ViewBag.Error != null)
-                    {
-                        <div class="alert alert-danger">
-                            @ViewBag.Error
-                        </div>
-                    }
-
-                    <div class="row tm-edit-product-row">
-                        <!-- Columna izquierda -->
-                        <div class="col-xl-6 col-lg-6 col-md-12">
-                            <div class="form-group mb-3">
-                                <label asp-for="Nombre" class="control-label">Nombre del Producto</label>
-                                <input asp-for="Nombre" class="form-control validate" required />
-                                <span asp-validation-for="Nombre" class="text-danger"></span>
-                            </div>
-
-                            <div class="form-group mb-3">
-                                <label asp-for="Descripcion" class="control-label">Descripción</label>
-                                <textarea asp-for="Descripcion" class="form-control validate" rows="3" required></textarea>
-                                <span asp-validation-for="Descripcion" class="text-danger"></span>
-                            </div>
-
-                            <div class="form-group mb-3">
-                                <label asp-for="Precio" class="control-label">Precio</label>
-                                <input asp-for="Precio" type="number" step="0.01" class="form-control validate" required />
-                                <span asp-validation-for="Precio" class="text-danger"></span>
-                            </div>
-
-                            <div class="form-group mb-3">
-                                <label asp-for="Estado" class="control-label">Estado</label>
-                                <select asp-for="Estado" class="custom-select tm-select-accounts">
-                                    <option value="true">Activo</option>
-                                    <option value="false">Inactivo</option>
-                                </select>
-                                <span asp-validation-for="Estado" class="text-danger"></span>
-                            </div>
-                        </div>
-
-                        <!-- Columna derecha (Imagen) -->
-                        <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
-                            <!-- Mostrar imagen actual si existe -->
-                            @if (Model.Imagen != null && Model.Imagen.Length > 0)
-                            {
-                                <div class="text-center mb-3">
-                                    <div class="tm-product-img-dummy mx-auto" id="currentImageContainer">
-                                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Imagen)"
-                                             alt="Imagen actual del producto"
-                                             class="img-fluid d-block mx-auto"
-                                             style="max-height: 200px;">
-                                    </div>
-                                    
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="tm-product-img-dummy mx-auto"
-                                     onclick="document.getElementById('fileInput').click();">
-                                    <i class="fas fa-cloud-upload-alt tm-upload-icon"></i>
-                                </div>
-                            }
-
-                            <div class="form-group mb-3">
-                                <label asp-for="ImagenFile" class="control-label">Cambiar Imagen (Opcional)</label>
-                                <input id="fileInput"
-                                       asp-for="ImagenFile"
-                                       type="file"
-                                       accept="image/*"
-                                       class="form-control-file"
-                                       style="display:none;" />
-                                <input type="button"
-                                       class="btn btn-primary btn-block mx-auto"
-                                       value="CAMBIAR IMAGEN DEL PRODUCTO"
-                                       onclick="document.getElementById('fileInput').click();" />
-                                <span asp-validation-for="ImagenFile" class="text-danger"></span>
-                                
-                            </div>
-                        </div>
-
-                        <!-- Botones -->
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-primary btn-block text-uppercase">Actualizar Producto</button>
-                            <a asp-action="Index" class="btn btn-secondary btn-block text-uppercase">Cancelar</a>
-                        </div>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
@@ -120,24 +358,58 @@
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
+
     <script>
         $(function () {
+            // Preview de nueva imagen
             $('#fileInput').change(function () {
                 var file = this.files[0];
+                var container = $('#imageUploadContainer');
+                var uploadIcon = $('#uploadIcon');
+                var uploadText = $('#uploadText');
+                var imagePreview = $('#imagePreview');
+                var currentImage = $('#currentImage');
+
                 if (file) {
+                    // Validar tipo de archivo
+                    var validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+                    if (!validTypes.includes(file.type)) {
+                        alert('Por favor, selecciona una imagen válida (JPG, PNG, GIF).');
+                        this.value = '';
+                        return;
+                    }
+
+                    // Validar tamaño (5MB)
+                    if (file.size > 5 * 1024 * 1024) {
+                        alert('La imagen es demasiado grande. El tamaño máximo permitido es 5MB.');
+                        this.value = '';
+                        return;
+                    }
+
                     var reader = new FileReader();
                     reader.onload = function (e) {
-                        if ($('#currentImageContainer').length > 0) {
-                            $('#currentImageContainer').html(
-                                '<img src="' + e.target.result + '" alt="Nueva imagen" class="img-fluid d-block mx-auto" style="max-height: 200px;">'
-                            );
-                        } else {
-                            $('.tm-product-img-dummy').html(
-                                '<img src="' + e.target.result + '" alt="Nueva imagen" class="img-fluid d-block mx-auto">'
-                            );
+                        container.addClass('has-image');
+                        uploadIcon.removeClass('fa-sync-alt').addClass('fa-check-circle');
+                        uploadText.text('Nueva imagen seleccionada');
+
+                        // Ocultar imagen actual y mostrar preview de la nueva
+                        if (currentImage.length > 0) {
+                            currentImage.hide();
                         }
+
+                        imagePreview.html('<img src="' + e.target.result + '" alt="Nueva imagen" class="image-preview">');
                     }
                     reader.readAsDataURL(file);
+                } else {
+                    container.removeClass('has-image');
+                    uploadIcon.removeClass('fa-check-circle').addClass('fa-sync-alt');
+                    uploadText.text('@(Model.Imagen != null && Model.Imagen.Length > 0 ? "Haz clic para cambiar la imagen" : "Haz clic para subir una imagen")');
+                    imagePreview.empty();
+
+                    // Mostrar imagen actual nuevamente
+                    if (currentImage.length > 0) {
+                        currentImage.show();
+                    }
                 }
             });
         });
