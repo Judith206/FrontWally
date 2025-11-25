@@ -9,7 +9,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient<ApiService>(client =>
 {
     //Defne la URL base que consumira la API
-    client.BaseAddress = new Uri("https://localhost:7173/api/"); // URL base de la API
+    client.BaseAddress = new Uri("http://18.223.32.217/Wallyshop/api/"); // URL base de la API
 });
 
 builder.Services.AddScoped<AuthService>();
@@ -20,7 +20,7 @@ builder.Services.AddScoped<ProductoService>();
 // Configurar la autenticación con cookies
 builder.Services.AddAuthentication("AuthCookie")
 .AddCookie("AuthCookie", options =>
-{
+{ 
     options.LoginPath = "/Auth/Login"; // Ruta a la página de login
     options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
 });
