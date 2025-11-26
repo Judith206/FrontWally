@@ -344,16 +344,21 @@ namespace FrontWally.Controllers
         }
 
         // GET: Productos por usuario
+        // ProductoController.cs
+
+        // GET: Productos por usuario (Mis Productos - Vista Personal)
         [HttpGet("MisProductos")]
         public async Task<IActionResult> MisProductos()
         {
             try
             {
                 var authToken = await GetTokenAsync();
-                var usuarioId = GetUsuarioId();
-                var productos = await _productoService.GetProductosByUsuarioAsync(usuarioId, authToken);
+                // Llamamos al nuevo método que invoca al endpoint filtrado del API: Producto/mis-productos
+                var productos = await _productoService.GetMisProductosAsync(authToken); // <--- CAMBIO AQUÍ
 
                 return View("Index", productos);
+                // Nota: Asegúrate de que las Vistas (Index, Eliminar, Editar) validen que el UsuarioId del producto
+                // coincide con el UsuarioId logueado para mostrar botones de Editar/Eliminar.
             }
             catch (Exception ex)
             {

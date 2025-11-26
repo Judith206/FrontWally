@@ -31,6 +31,8 @@ public class HomeController : Controller
             var token = await GetTokenAsync();
 
             // Obtener productos recientes
+            // Obtener el Nombre del Usuario Logueado (Asumiendo que existe el Claim "Nombre")
+            var userName = HttpContext.User.FindFirst("Nombre")?.Value ?? "Usuario";
             var productos = await _productoService.GetAllProductosAsync(token);
             var productosRecientes = productos
                 .OrderByDescending(p => p.Id) // O por fecha si tienes ese campo
@@ -42,6 +44,7 @@ public class HomeController : Controller
 
             var viewModel = new DashboardViewModel
             {
+                NombreUsuario = userName,
                 ProductosRecientes = productosRecientes,
                 TotalProductos = productos.Count,
                 TotalCotizaciones = cotizaciones.Count,
@@ -87,8 +90,10 @@ public class HomeController : Controller
 }
 
 // ViewModel para el dashboard
+// ViewModel para el dashboard
 public class DashboardViewModel
 {
+    public string NombreUsuario { get; set; } = string.Empty; // <-- NUEVO
     public List<ProductoReadDTO> ProductosRecientes { get; set; } = new();
     public int TotalProductos { get; set; }
     public int TotalCotizaciones { get; set; }

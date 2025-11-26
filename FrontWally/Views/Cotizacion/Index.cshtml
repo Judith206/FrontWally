@@ -2,29 +2,19 @@
 
 @{
     ViewData["Title"] = "Cotizaciones";
-}
 
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger alert-marketplace alert-dismissible fade show" role="alert">
-        @TempData["Error"]
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-}
+    // Obtener el ID del usuario actual para la lógica de autorización.
+    var currentUserIdClaim = User.FindFirst("UserId");
+    int currentUserId = 0;
 
-@if (TempData["Info"] != null)
-{
-    <div class="alert alert-info alert-marketplace alert-dismissible fade show" role="alert">
-        @TempData["Info"]
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
+    if (currentUserIdClaim != null && int.TryParse(currentUserIdClaim.Value, out int userId))
+    {
+        currentUserId = userId;
+    }
 }
 
 <style>
+    /* ... (Todos los estilos CSS de Cotizacion/Index.cshtml sin cambios) ... */
     .cotizaciones-page {
         background-color: #f0f2f5;
         min-height: calc(100vh - 100px);
@@ -206,7 +196,6 @@
 <div class="cotizaciones-page">
     <div class="container-fluid">
 
-        <!-- Mensajes de éxito/error -->
         @if (TempData["Success"] != null)
         {
             <div class="alert alert-success alert-marketplace alert-dismissible fade show" role="alert">
@@ -238,12 +227,9 @@
         }
 
         <div class="row">
-            <!-- Sidebar de Filtros -->
             <div class="col-lg-3 col-md-4">
                 <div class="filters-sidebar">
-                    
 
-                    <!-- Filtro por fecha -->
                     <div class="filter-section">
                         <h6>Filtrar por Fecha</h6>
                         <form asp-action="PorFecha" method="get">
@@ -261,7 +247,6 @@
                         </form>
                     </div>
 
-                    <!-- Buscar por contacto -->
                     <div class="filter-section">
                         <h6>Buscar Contacto</h6>
                         <form asp-action="Buscar" method="get">
@@ -273,11 +258,11 @@
                             </button>
                         </form>
                     </div>
+
                     <a asp-controller="Cotizacion" asp-action="Crear" class="btn btn-new-cotizacion w-100">
                         <i class="fas fa-plus-circle me-2"></i>Nueva Cotización
                     </a>
 
-                    <!-- Estadísticas rápidas -->
                     @if (Model != null && Model.Any())
                     {
                         <div class="filter-section">
@@ -286,10 +271,10 @@
                                 <div class="stat-value">@Model.Count()</div>
                                 <div class="stat-label">Total Cotizaciones</div>
                             </div>
-                            @* <div class="stats-card">
+                            <div class="stats-card">
                                 <div class="stat-value">@Model.Sum(c => c.Total).ToString("C")</div>
                                 <div class="stat-label">Suma Total</div>
-                            </div> *@
+                            </div>
                             <div class="stats-card">
                                 <div class="stat-value">@Model.Select(c => c.ProductoId).Distinct().Count()</div>
                                 <div class="stat-label">Productos Únicos</div>
@@ -297,13 +282,8 @@
                         </div>
                     }
                 </div>
-
-                @* <a asp-controller="Cotizacion" asp-action="Crear" class="btn btn-new-cotizacion w-100">
-                    <i class="fas fa-plus-circle me-2"></i>Nueva Cotización
-                </a> *@
             </div>
 
-            <!-- Lista de Cotizaciones -->
             <div class="col-lg-9 col-md-8">
                 @if (Model != null && Model.Any())
                 {
@@ -342,15 +322,21 @@
                                         </div>
 
                                         <div class="cotizacion-actions">
-                                            @* <a asp-action="Editar" asp-route-id="@cotizacion.Id"
-                                               class="btn btn-edit btn-cotizacion" title="Editar">
-                                                <i class="fas fa-edit me-1"></i> Editar
-                                            </a>
-                                            <a asp-action="Eliminar" asp-route-id="@cotizacion.Id"
-                                               class="btn btn-delete btn-cotizacion" title="Eliminar">
-                                                <i class="fas fa-trash-alt me-1"></i> Eliminar
-                                            </a> *@
-                                            <span class="text-muted">Acciones deshabilitadas</span>
+                                            @if (cotizacion.UsuarioId == currentUserId) // 🔑 Lógica de Autorización
+                                            {
+                                                <a asp-action="Editar" asp-route-id="@cotizacion.Id"
+                                                   class="btn btn-edit btn-cotizacion" title="Editar">
+                                                    <i class="fas fa-edit me-1"></i> Editar
+                                                </a>
+                                                <a asp-action="Eliminar" asp-route-id="@cotizacion.Id"
+                                                   class="btn btn-delete btn-cotizacion" title="Eliminar">
+                                                    <i class="fas fa-trash-alt me-1"></i> Eliminar
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">Acciones de gestión reservadas al creador</span>
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -382,8 +368,16 @@
             var today = new Date();
             var firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
 
-            $('input[name="fechaInicio"]').val(firstDay.toISOString().split('T')[0]);
-            $('input[name="fechaFin"]').val(today.toISOString().split('T')[0]);
+            // Asegurar que los inputs de fecha existen antes de intentar asignar
+            var fechaInicioInput = $('input[name="fechaInicio"]');
+            var fechaFinInput = $('input[name="fechaFin"]');
+
+            if (fechaInicioInput.length) {
+                fechaInicioInput.val(firstDay.toISOString().split('T')[0]);
+            }
+            if (fechaFinInput.length) {
+                fechaFinInput.val(today.toISOString().split('T')[0]);
+            }
 
             // Auto-dismiss alerts después de 5 segundos
             setTimeout(function() {

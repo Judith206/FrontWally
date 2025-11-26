@@ -10,5 +10,6 @@
         public byte[]? Imagen { get; set; } 
         public int UsuarioId { get; set; }
         public string UsuarioNombre { get; set; } = "";
+
     }
 }

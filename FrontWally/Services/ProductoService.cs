@@ -90,5 +90,11 @@ namespace FrontWally.Services
         {
             return await _apiService.GetAllAsync<ProductoReadDTO>("producto/activos", token);
         }
+        public async Task<List<ProductoReadDTO>> GetMisProductosAsync(string token = null)
+        {
+            // Llama al endpoint de la API que ya aplica el filtro por UsuarioId
+            // El ID se extrae del token JWT en el lado del API.
+            return await _apiService.GetAllAsync<ProductoReadDTO>("Producto/mis-productos", token);
+        }
     }
 }
