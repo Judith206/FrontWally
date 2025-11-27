@@ -224,12 +224,46 @@
             margin-top: 10px;
         }
 
-        .marketplace-title {
-            color: #1877f2;
-            font-weight: 700;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
+        /* Estilo común para ambos botones */
+        .btn-action {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            border-radius: 0.375rem; /* redondeo de botones */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
         }
+
+        /* Color diferente solo para eliminar */
+        .btn-delete-action {
+            background-color: #dc3545; /* rojo bootstrap */
+            color: #fff;
+        }
+
+        .btn-action:hover {
+            opacity: 0.85;
+        }
+
+        /* Si quieres diferenciar Editar */
+        .btn-action:not(.btn-delete-action) {
+            background-color: #0d6efd; /* azul bootstrap */
+            color: #fff;
+        }
+
+
+        .action-buttons {
+    display: flex;
+    justify-content: center; /* o "space-between" si quieres que se separen más */
+    align-items: center;
+    gap: 10px; /* espacio entre los botones */
+}
+
+
     </style>
 </head>
 <body>
@@ -301,18 +335,22 @@
                                                     <small>Summerville, SC · 6 días</small>
                                                 </div>
                                             </div>
-
                                             <div class="product-actions">
-                                                @if (producto.UsuarioId == currentUserId) // 🔑 Lógica de Autorización
+                                                @if (producto.UsuarioId == currentUserId)
                                                 {
-                                                    <a asp-controller="Producto" asp-action="Editar" asp-route-id="@producto.Id"
-                                                       class="btn btn-edit btn-marketplace" title="Editar">
-                                                        <i class="fas fa-edit me-1"></i> Editar
-                                                    </a>
-                                                    <a asp-controller="Producto" asp-action="Eliminar" asp-route-id="@producto.Id"
-                                                       class="btn btn-delete btn-marketplace" title="Eliminar">
-                                                        <i class="fas fa-trash-alt me-1"></i> Eliminar
-                                                    </a>
+                                                    <div class="action-buttons d-flex gap-2">
+                                                        <a asp-controller="Producto" asp-action="Editar" asp-route-id="@producto.Id"
+                                                           class="btn btn-action" title="Editar">
+                                                            <i class="fas fa-edit me-1"></i> Editar
+                                                        </a>
+
+                                                        <form asp-action="EliminarProducto" asp-route-id="@producto.Id" method="post">
+                                                            <button type="submit" class="btn btn-action btn-delete-action" title="Eliminar">
+                                                                <i class="fas fa-trash-alt me-1"></i> Eliminar
+                                                            </button>
+                                                        </form>
+                                                    </div>
+
                                                 }
                                                 else
                                                 {
@@ -322,6 +360,8 @@
                                                     </a>
                                                 }
                                             </div>
+
+
                                         </div>
                                     </div>
                                 </div>
