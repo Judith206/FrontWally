@@ -328,10 +328,11 @@
                                                    class="btn btn-edit btn-cotizacion" title="Editar">
                                                     <i class="fas fa-edit me-1"></i> Editar
                                                 </a>
-                                                <a asp-action="Eliminar" asp-route-id="@cotizacion.Id"
-                                                   class="btn btn-delete btn-cotizacion" title="Eliminar">
-                                                    <i class="fas fa-trash-alt me-1"></i> Eliminar
-                                                </a>
+                                                <form asp-action="Eliminar" asp-route-id="@cotizacion.Id" method="post" class="d-inline">
+                                                    <button type="submit" class="btn btn-delete btn-cotizacion" title="Eliminar">
+                                                        <i class="fas fa-trash-alt me-1"></i> Eliminar
+                                                    </button>
+                                                </form>
                                             }
                                             else
                                             {

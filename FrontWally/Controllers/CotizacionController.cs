@@ -247,5 +247,39 @@ namespace FrontWally.Controllers
             var userIdClaim = User.FindFirst("UserId");
             return userIdClaim != null ? int.Parse(userIdClaim.Value) : 0;
         }
+
+        // POST: Cotizacion/Eliminar/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Eliminar(int id)
+        {
+            try
+            {
+                var authToken = await GetTokenAsync();
+                var cotizacion = await _cotizacionService.GetCotizacionByIdAsync(id, authToken);
+
+                if (cotizacion == null)
+                {
+                    TempData["Error"] = "Cotización no encontrada";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                if (cotizacion.UsuarioId != GetUsuarioId())
+                {
+                    TempData["Error"] = "No tienes permiso para eliminar esta cotización";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                await _cotizacionService.DeleteCotizacionAsync(id, authToken);
+                TempData["Success"] = "Cotización eliminada correctamente";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Error al eliminar cotización: " + ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
     }
 }
