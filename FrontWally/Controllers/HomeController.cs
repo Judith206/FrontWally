@@ -86,6 +86,13 @@ public class HomeController : Controller
             _logger.LogError(ex, "Error al obtener token");
             return null;
         }
+
+    }
+    public IActionResult About()
+    {
+        // Esta línea indica a ASP.NET Core que busque la vista "About.cshtml"
+        // en la carpeta Views/Home/
+        return View();
     }
 }
 
