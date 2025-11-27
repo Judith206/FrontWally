@@ -418,7 +418,7 @@ namespace FrontWally.Controllers
             return View("Index", testProductos);
         }
 
-        // POST: Cotizacion/Eliminar/5
+        // POST: Producto/Eliminar/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EliminarProducto(int id)
