@@ -1,0 +1,125 @@
+﻿@{
+    ViewData["Title"] = "Sobre Nosotros - WallyShop";
+}
+
+<style>
+    .about-page {
+        background-color: #f0f2f5;
+        padding: 40px 0;
+        min-height: calc(100vh - 100px);
+    }
+
+    .about-card {
+        background-color: white;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .pillar-item {
+        margin-bottom: 25px;
+        padding: 15px;
+        border-left: 5px solid #1877f2;
+        background-color: #f7f9fa;
+        border-radius: 4px;
+    }
+
+        .pillar-item h4 {
+            color: #1c1e21;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+</style>
+
+<div class="about-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-primary mb-4">Acerca de WallyShop: Compra y Vende con Confianza</h1>
+
+                <div class="about-card mb-5">
+
+                    <p class="lead text-dark">
+                        En la actualidad, las compras en línea son una práctica cotidiana, pero la desconfianza en los vendedores, la desorganización de la información, la sobrecarga de opciones y la falta de accesibilidad limitan la experiencia del comprador.
+                    </p>
+
+                    <p>
+                        Frente a esta situación, surge Wally Shop, una plataforma innovadora diseñada para transformar la manera en que las personas compran y venden en línea. Inspirada en la funcionalidad de los marketplaces más populares, nuestro enfoque es mejorar la seguridad, la organización y la comodidad del usuario, ofreciendo una solución integral que centraliza productos y garantiza transacciones seguras.
+                    </p>
+                    <hr>
+
+                    <h2 class="mb-4 text-secondary">Nuestra Solución se Basa en 3 Pilares</h2>
+
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="pillar-item">
+                                <h4 class="text-primary"><i class="fas fa-boxes me-2"></i> 1. Centralización Inteligente</h4>
+                                <p class="mb-0">
+                                    Reunimos miles de productos de distintas categorías en un solo lugar. Gracias a nuestro motor de búsqueda optimizado y filtros precisos, evitamos que pierdas tiempo visitando múltiples páginas para encontrar lo que necesitas.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="pillar-item">
+                                <h4 class="text-primary"><i class="fas fa-lock me-2"></i> 2. Seguridad y Confianza</h4>
+                                <p class="mb-0">
+                                    La plataforma verifica a los vendedores y utiliza protocolos de cotización seguros, lo que te protege de fraudes y malas experiencias. Garantizamos transparencia en cada paso del proceso de compra.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="pillar-item">
+                                <h4 class="text-primary"><i class="fas fa-user-check me-2"></i> 3. Experiencia Simple y Personalizada</h4>
+                                <p class="mb-0">
+                                    Ofrecemos una interfaz intuitiva, limpia y adaptable a cualquier dispositivo. Además, facilitamos la cotización de productos y la comparación de precios para ayudarte a tomar la mejor decisión de compra.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <h2 class="mb-4 text-secondary">Funcionalidades Clave</h2>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <h5 class="text-primary"><i class="fas fa-search me-2"></i> Navegación Rápida</h5>
+                            <p class="small text-muted mb-0">Una vez que inicias sesión, puedes explorar una lista de productos con su nombre, imagen, precio y descripción, encontrando lo que buscas al instante.</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <h5 class="text-primary"><i class="fas fa-plus-circle me-2"></i> Publicación Sencilla</h5>
+                            <p class="small text-muted mb-0">Los usuarios pueden ir al apartado "Subir producto" y completar un formulario simple con la información necesaria (nombre, imagen, precio y descripción) para empezar a vender.</p>
+                        </div>
+                        <div class="col-md-12">
+                            <h5 class="text-primary"><i class="fas fa-calculator me-2"></i> Sistema de Cotizaciones</h5>
+                            <p class="small text-muted mb-0">La Sección de Cotizaciones permite a los compradores solicitar una estimación de costo (fecha, contacto, cantidad, total), ayudando a calcular y confirmar el costo antes de hacer una compra.</p>
+                        </div>
+                    </div>
+
+                    <hr class="mt-4">
+
+                    <h3 class="mb-3 text-success">¿Por qué WallyShop?</h3>
+                    <p>
+                        Wally Shop no solo es una tienda en línea; es una herramienta pensada para ti. Ahorra tiempo, evita frustraciones y fomenta la confianza en cada transacción. Creemos que comprar debería ser fácil, seguro y accesible para todos.
+                    </p>
+
+                </div>
+
+                <div class="about-card mt-4 p-4">
+                    <h3 class="text-secondary">Contáctanos</h3>
+                    <p>Si tienes alguna pregunta o necesitas asistencia, no dudes en comunicarte con nuestro equipo.</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-envelope me-2 text-primary"></i> Email: OnlineStore@wallyshop.com</li>
+                        <li><i class="fas fa-phone me-2 text-primary"></i> Teléfono: +503 7456 7890</li>
+                    </ul>
+                </div>
+
+                <div class="mt-4">
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Volver al Inicio
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
